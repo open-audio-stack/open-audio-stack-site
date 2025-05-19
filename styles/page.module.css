@@ -1,0 +1,41 @@
+.header {
+  display: flex;
+  padding: 1rem;
+}
+
+.nav ul, 
+.nav li {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav li {
+  float: left;
+}
+
+.logoLink,
+.nav li a {
+  color: #000;
+  display: block;
+  margin: 0 1rem;
+  padding: 1rem 0;
+  text-decoration: none;
+}
+
+.logoLink {
+  margin-right: 2rem;
+}
+
+.nav li a {
+  padding: 1.35rem 0 .4rem;
+}
+
+.nav li a:hover {
+  border-bottom: 2px solid #000;
+}
+
+.section {
+  display: flex;
+  padding: 1rem 2rem;
+}
