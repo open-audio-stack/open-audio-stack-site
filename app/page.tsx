@@ -3,33 +3,37 @@ import Image from 'next/image';
 import styles from '../styles/page.module.css';
 import { isSelected } from '@/lib/path';
 import { usePathname } from 'next/navigation';
+import Link from 'next/link';
 
 export default function Home() {
   return (
     <div className={styles.page}>
       <header className={styles.header}>
-        <a className={styles.logoLink} href="/">
-          <Image className={styles.logo} src="/images/open-audio-stack-logo.svg" width={194} height={34} alt="Open Audio Stack logo" />
-        </a>
+        <Link className={styles.logoLink} href="/">
+          <Image
+            className={styles.logo}
+            src="/images/open-audio-stack-logo.svg"
+            width={194}
+            height={34}
+            alt="Open Audio Stack logo"
+          />
+        </Link>
         <nav className={styles.nav}>
           <ul>
             <li>
-              <a
-                href="/"
-                className={isSelected(usePathname(), `/`)}
-              >plugin</a>
+              <Link href="/" className={isSelected(usePathname(), `/`)}>
+                plugin
+              </Link>
             </li>
             <li>
-              <a
-                href="/preset"
-                className={isSelected(usePathname(), `/preset`)}
-              >preset</a>
+              <Link href="/preset" className={isSelected(usePathname(), `/preset`)}>
+                preset
+              </Link>
             </li>
             <li>
-              <a
-                href="/project"
-                className={isSelected(usePathname(), `/project`)}
-              >project</a>
+              <Link href="/project" className={isSelected(usePathname(), `/project`)}>
+                project
+              </Link>
             </li>
           </ul>
         </nav>
@@ -40,5 +44,5 @@ export default function Home() {
         </main>
       </section>
     </div>
-  )
+  );
 }

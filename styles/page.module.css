@@ -3,7 +3,7 @@
   padding: 1rem;
 }
 
-.nav ul, 
+.nav ul,
 .nav li {
   list-style: none;
   margin: 0;
@@ -28,7 +28,7 @@
 }
 
 .nav li a {
-  padding: 1.35rem 0 .4rem;
+  padding: 1.35rem 0 0.4rem;
 }
 
 .nav li a:hover {
