@@ -1,36 +1,74 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<div align="center">
+<h1>
+  <img src="https://raw.githubusercontent.com/open-audio-stack/open-audio-stack-registry/refs/heads/main/src/assets/open-audio-stack-logo.svg" alt="Open Audio Stack Logo"><br />
+  Open Audio Stack
+</h1>
+<p>Audio registry specification and API with searchable list of packages</p>
+  <p>
+    <a href="specification.md">Registry Specification</a>
+    ⦁︎
+    <a href="https://open-audio-stack.github.io/open-audio-stack-registry">Registry API</a>
+    ⦁︎
+    <a href="https://github.com/orgs/open-audio-stack/projects">Roadmap</a>
+  </p>
+<p>
 
-## Getting Started
+![Test](https://github.com/open-audio-stack/open-audio-stack-registry/workflows/Test/badge.svg)
+![Release](https://github.com/open-audio-stack/open-audio-stack-registry/workflows/Release/badge.svg)
+<a href="https://discord.com/invite/9D94f98PxP" target="_blank"><img src="https://img.shields.io/badge/chat-on%20discord-7289DA.svg" alt="Join the chat at Discord"></a>
 
-First, run the development server:
+![Open Audio Stack - Registry - Specification 1.0.0](/src/assets/open-audio-stack-diagram-registry.svg)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+</div>
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+# open-audio-stack-site
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Website for Open Audio Stack with tools to create Plugin, Preset and Project packages.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Developer information
 
-## Learn More
+Open Audio Stack Registry was built using:
 
-To learn more about Next.js, take a look at the following resources:
+- NodeJS 20.x
+- TypeScript 5.x
+- eslint 9.x
+- prettier 3.x
+- vitest 1.x
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Developer installation
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Install dependencies using:
 
-## Deploy on Vercel
+    npm install
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Developer usage
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Run dev commands using:
+
+    npm run lint
+    npm run format
+    npm run dev
+    npm test
+
+Create a production build using:
+
+    npm run build
+
+Run the production build:
+
+    npm start
+
+## Developer deployment
+
+This package is versioned using git tags:
+
+    npm version patch
+    git push && git push origin --tags
+
+GitHub Actions will automatically publish the site to Github pages at:
+
+    https://open-audio-stack.github.io/open-audio-stack-site
+
+## Contact
+
+For more information please contact kmturley
