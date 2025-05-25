@@ -1,41 +1,106 @@
 .header {
+  align-items: center;
+  box-sizing: border-box;
   display: flex;
-  padding: 1rem;
+  justify-content: flex-start;
+  gap: 3rem;
+  padding: 2rem;
+  width: 100%;
 }
 
-.nav ul,
-.nav li {
+.logoLink {
+  align-items: center;
+  display: flex;
+}
+
+.nav ul {
+  display: flex;
+  gap: 2rem;
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
 .nav li {
-  float: left;
+  font-size: 1.1rem;
+  font-weight: 400;
 }
 
-.logoLink,
 .nav li a {
   color: #000;
-  display: block;
-  margin: 0 1rem;
-  padding: 1rem 0;
   text-decoration: none;
 }
 
-.logoLink {
-  margin-right: 2rem;
+.nav li a:hover,
+.selectedTab {
+  border-bottom: 1px solid #111;
+  padding-bottom: 3px;
 }
 
-.nav li a {
-  padding: 1.35rem 0 0.4rem;
-}
-
-.nav li a:hover {
-  border-bottom: 2px solid #000;
-}
-
-.section {
+.card {
+  padding: 2rem;
   display: flex;
-  padding: 1rem 2rem;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.card h4 {
+  margin-bottom: 0.5rem;
+}
+
+.formGroup {
+  display: flex;
+  gap: 1rem;
+}
+
+.input,
+.select,
+.textarea {
+  background-color: #fafafa;
+  border: 1px solid #eee;
+  border-radius: 10px;
+  box-sizing: border-box;
+  font-family: inherit;
+  font-size: 1rem;
+  padding: 10px 12px;
+  outline: none;
+  transition: border 0.2s;
+  width: 100%;
+}
+
+.textarea {
+  min-height: 5rem;
+  resize: vertical;
+}
+
+.metadata {
+  background-color: #f8f8f8;
+}
+
+.codeBlock {
+  background: #232323;
+  color: #e6e6e6;
+  border-radius: 10px;
+  padding: 18px 16px;
+  margin: 0;
+  font-size: 0.98rem;
+  font-family: 'Fira Mono', 'Consolas', monospace;
+  overflow-x: auto;
+  margin-bottom: 12px;
+}
+
+@media (min-width: 64rem) {
+  .header {
+    position: absolute;
+  }
+
+  .mainColumns {
+    display: flex;
+    min-height: 100vh;
+  }
+
+  .card {
+    padding-top: 8rem;
+    width: 33.33%;
+  }
 }
