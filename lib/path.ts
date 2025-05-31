@@ -15,7 +15,6 @@
 // }
 
 export function isSelected(pathname: string, match: string) {
-  console.log('isSelected', pathname, match);
   if (match === '/') {
     return pathname === match ? 'active' : '';
   }
