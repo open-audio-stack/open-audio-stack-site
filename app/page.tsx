@@ -119,15 +119,15 @@ export default function Home() {
   /* eslint-disable  @typescript-eslint/no-explicit-any */
   function handleChange(field: string, value: any) {
     console.log('handleChange', field, value);
+    handleValidate({ ...form, [field]: value } as PluginInterface);
     /* eslint-disable  @typescript-eslint/no-explicit-any */
     setForm((f: any) => ({ ...f, [field]: value }));
     /* eslint-disable  @typescript-eslint/no-explicit-any */
     setTouched((t: any) => ({ ...t, [field]: true }));
-    handleValidate();
   }
 
-  function handleValidate() {
-    const result = PackageVersionValidator.safeParse(form);
+  function handleValidate(data: PluginInterface) {
+    const result = PackageVersionValidator.safeParse(data);
     if (!result.success) {
       /* eslint-disable  @typescript-eslint/no-explicit-any */
       const fieldErrors: any = {};
