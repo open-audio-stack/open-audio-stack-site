@@ -17,6 +17,9 @@ import {
   FileType,
   License,
   PluginType,
+  PackageFileValidator,
+  PluginFile,
+  packageToYaml,
 } from '@open-audio-stack/core';
 import {
   Autocomplete,
@@ -30,7 +33,8 @@ import {
 } from '@mui/material';
 
 // Example data to show how the form populates
-const VERSION: string = '1.3.1';
+/* eslint-disable  prefer-const */
+let VERSION: string = '1.3.1';
 const PLUGIN: PluginInterface = {
   audio: 'https://open-audio-stack.github.io/open-audio-stack-registry/plugins/surge-synthesizer/surge/surge.flac',
   author: 'Surge Synth Team',
@@ -120,10 +124,14 @@ export default function Home() {
   function handleChange(field: string, value: any) {
     console.log('handleChange', field, value);
     handleValidate({ ...form, [field]: value } as PluginInterface);
-    /* eslint-disable  @typescript-eslint/no-explicit-any */
-    setForm((f: any) => ({ ...f, [field]: value }));
-    /* eslint-disable  @typescript-eslint/no-explicit-any */
-    setTouched((t: any) => ({ ...t, [field]: true }));
+    updateForm(field, value);
+  }
+
+  function handleFileChange(index: number, field: string, value: any) {
+    console.log('handleFileChange', field, value);
+    const updatedFiles = form.files.map((file, i) => (i === index ? { ...file, [field]: value } : file));
+    handleFileValidate(index, updatedFiles[index]);
+    updateForm('files', updatedFiles);
   }
 
   function handleValidate(data: PluginInterface) {
@@ -134,11 +142,36 @@ export default function Home() {
       result.error.errors.forEach(e => {
         if (e.path[0]) fieldErrors[e.path[0]] = e.message;
       });
-      console.log('Validation errors:', fieldErrors);
+      console.log('handleValidate errors:', fieldErrors);
       setErrors(fieldErrors);
     } else {
       setErrors({});
     }
+  }
+
+  function handleFileValidate(index: number, data: PluginFile) {
+    const result = PackageFileValidator.safeParse(data);
+    if (!result.success) {
+      /* eslint-disable  @typescript-eslint/no-explicit-any */
+      const fieldErrors: any = {
+        files: [],
+      };
+      if (!fieldErrors.files[index]) fieldErrors.files[index] = {};
+      result.error.errors.forEach(e => {
+        if (e.path[0]) fieldErrors.files[index][e.path[0]] = e.message;
+      });
+      console.log('handleFileValidate errors:', fieldErrors);
+      setErrors(fieldErrors);
+    } else {
+      setErrors({});
+    }
+  }
+
+  function updateForm(field: string, value: any) {
+    /* eslint-disable  @typescript-eslint/no-explicit-any */
+    setForm((f: any) => ({ ...f, [field]: value }));
+    /* eslint-disable  @typescript-eslint/no-explicit-any */
+    setTouched((t: any) => ({ ...t, [field]: true }));
   }
 
   return (
@@ -296,7 +329,6 @@ export default function Home() {
                 variant="filled"
                 fullWidth
                 value={VERSION}
-                onChange={e => handleChange('version', e.target.value)}
                 InputProps={{
                   startAdornment: <InputAdornment position="start">v</InputAdornment>,
                 }}
@@ -306,8 +338,8 @@ export default function Home() {
                 label="Release date"
                 type="datetime-local"
                 variant="filled"
-                value={form.date.substring(0, 16)} // TODO: Handle UTC timezone conversion properly
-                onChange={e => handleChange('date', e.target.value)}
+                value={form.date.substring(0, 16)}
+                onChange={e => handleChange('date', e.target.value + ':00.000Z')}
                 error={!!errors.date && touched.date}
                 helperText={touched.date && errors.date}
                 fullWidth
@@ -328,31 +360,66 @@ export default function Home() {
             <div className={styles.filesHeader}>
               <h4>Files</h4>
             </div>
-            <div className={styles.formGroup}>
-              <FormControl variant="filled" fullWidth>
-                <InputLabel id="label-filetype">File type</InputLabel>
-                <Select label="File type" variant="filled" labelId="label-filetype">
-                  {fileTypes.map(fileType => {
-                    return (
-                      <MenuItem value={fileType.value} key={fileType.value}>
-                        {fileType.name}
-                      </MenuItem>
-                    );
-                  })}
-                </Select>
-              </FormControl>
-            </div>
-            <div className={styles.formGroup}>
-              <TextField label="File url" variant="filled" fullWidth />
-            </div>
-            <div className={styles.formGroup}>
-              <TextField label="File size" variant="filled" fullWidth />
-              <TextField label="File sha256" variant="filled" fullWidth />
-            </div>
+            {form.files.map((file, index) => (
+              <div className={styles.file} key={index}>
+                <div className={styles.formGroup}>
+                  <FormControl variant="filled" fullWidth>
+                    <InputLabel id={`label-filetype-${index}`}>File type</InputLabel>
+                    <Select
+                      label="File type"
+                      variant="filled"
+                      labelId={`label-filetype-${index}`}
+                      value={file.type}
+                      onChange={e => handleFileChange(index, 'type', e.target.value)}
+                    >
+                      {fileTypes.map(fileType => (
+                        <MenuItem value={fileType.value} key={fileType.value}>
+                          {fileType.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    {errors.files && errors.files[index]?.type && (
+                      <span style={{ color: 'red', fontSize: 12 }}>{errors.files[index].type}</span>
+                    )}
+                  </FormControl>
+                </div>
+                <div className={styles.formGroup}>
+                  <TextField
+                    label="File url"
+                    variant="filled"
+                    value={file.url}
+                    fullWidth
+                    onChange={e => handleFileChange(index, 'url', e.target.value)}
+                    error={!!(errors.files && errors.files[index]?.url)}
+                    helperText={errors.files && errors.files[index]?.url}
+                  />
+                </div>
+                <div className={styles.formGroup}>
+                  <TextField
+                    label="File size"
+                    variant="filled"
+                    value={file.size}
+                    fullWidth
+                    onChange={e => handleFileChange(index, 'size', Number(e.target.value))}
+                    error={!!(errors.files && errors.files[index]?.size)}
+                    helperText={errors.files && errors.files[index]?.size}
+                  />
+                  <TextField
+                    label="File sha256"
+                    variant="filled"
+                    value={file.sha256}
+                    fullWidth
+                    onChange={e => handleFileChange(index, 'sha256', e.target.value)}
+                    error={!!(errors.files && errors.files[index]?.sha256)}
+                    helperText={errors.files && errors.files[index]?.sha256}
+                  />
+                </div>
+              </div>
+            ))}
           </div>
           <div className={`${styles.card} ${styles.metadata}`}>
             <h4>Metadata</h4>
-            <pre className={styles.codeBlock}>{JSON.stringify(form, null, 2)}</pre>
+            <pre className={styles.codeBlock}>{packageToYaml(form)}</pre>
           </div>
         </main>
       </section>
