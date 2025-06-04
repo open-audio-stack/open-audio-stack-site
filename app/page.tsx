@@ -490,11 +490,8 @@ export default function Home() {
                         type: FileType.Installer,
                         url: '',
                       };
-                      // Insert blank file after current index
                       const newFiles = [...form.files.slice(0, index + 1), blankFile, ...form.files.slice(index + 1)];
                       updateForm('files', newFiles);
-
-                      // Insert blank error object at the same index+1
                       setErrors((prev: any) => {
                         const newErrors = { ...prev };
                         if (newErrors.files) {
@@ -519,11 +516,8 @@ export default function Home() {
                   <button
                     type="button"
                     onClick={() => {
-                      // Remove file at current index
                       const newFiles = form.files.filter((_, i) => i !== index);
                       updateForm('files', newFiles);
-
-                      // Remove error at the same index
                       setErrors((prev: any) => {
                         const newErrors = { ...prev };
                         if (newErrors.files) {
@@ -553,6 +547,67 @@ export default function Home() {
           <div className={`${styles.card} ${styles.metadata}`}>
             <h4>Metadata</h4>
             <pre className={styles.codeBlock}>{packageToYaml(form)}</pre>
+            <div style={{ display: 'flex', gap: 12, marginTop: 12 }}>
+              <button
+                type="button"
+                onClick={() => {
+                  navigator.clipboard.writeText(packageToYaml(form));
+                }}
+                style={{
+                  padding: '6px 18px',
+                  borderRadius: 8,
+                  border: '1px solid #ccc',
+                  background: '#f7f7f7',
+                  cursor: 'pointer',
+                }}
+              >
+                Copy
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  const blob = new Blob([packageToYaml(form)], { type: 'text/yaml' });
+                  const url = URL.createObjectURL(blob);
+                  const a = document.createElement('a');
+                  a.href = url;
+                  a.download = `${form.name || 'plugin'}.yaml`;
+                  document.body.appendChild(a);
+                  a.click();
+                  document.body.removeChild(a);
+                  URL.revokeObjectURL(url);
+                }}
+                style={{
+                  padding: '6px 18px',
+                  borderRadius: 8,
+                  border: '1px solid #ccc',
+                  background: '#f7f7f7',
+                  cursor: 'pointer',
+                }}
+              >
+                Download
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  const title = encodeURIComponent(`Plugin: ${form.name} (v${VERSION})`);
+                  const body = encodeURIComponent('```yaml\n' + packageToYaml(form) + '\n```');
+                  window.open(
+                    `https://github.com/open-audio-stack/open-audio-stack-registry/issues/new?title=${title}&body=${body}`,
+                    '_blank',
+                  );
+                }}
+                style={{
+                  padding: '6px 18px',
+                  borderRadius: 8,
+                  border: '1px solid #232323',
+                  background: '#232323',
+                  color: '#fff',
+                  cursor: 'pointer',
+                }}
+              >
+                Submit via GitHub
+              </button>
+            </div>
           </div>
         </main>
       </section>
