@@ -477,6 +477,76 @@ export default function Home() {
                     helperText={errors.files && errors.files[index]?.sha256}
                   />
                 </div>
+                <div className={styles.formGroup} style={{ marginTop: 8 }}>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const blankFile: PluginFile = {
+                        architectures: [],
+                        contains: [],
+                        sha256: '',
+                        systems: [],
+                        size: 0,
+                        type: FileType.Installer,
+                        url: '',
+                      };
+                      // Insert blank file after current index
+                      const newFiles = [...form.files.slice(0, index + 1), blankFile, ...form.files.slice(index + 1)];
+                      updateForm('files', newFiles);
+
+                      // Insert blank error object at the same index+1
+                      setErrors((prev: any) => {
+                        const newErrors = { ...prev };
+                        if (newErrors.files) {
+                          const filesArr = Array.isArray(newErrors.files) ? [...newErrors.files] : [];
+                          filesArr.splice(index + 1, 0, {});
+                          newErrors.files = filesArr;
+                        }
+                        return newErrors;
+                      });
+                    }}
+                    style={{
+                      marginRight: 8,
+                      padding: '6px 14px',
+                      borderRadius: 8,
+                      border: '1px solid #ccc',
+                      background: '#f7f7f7',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    Add file
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      // Remove file at current index
+                      const newFiles = form.files.filter((_, i) => i !== index);
+                      updateForm('files', newFiles);
+
+                      // Remove error at the same index
+                      setErrors((prev: any) => {
+                        const newErrors = { ...prev };
+                        if (newErrors.files) {
+                          const filesArr = Array.isArray(newErrors.files) ? [...newErrors.files] : [];
+                          filesArr.splice(index, 1);
+                          newErrors.files = filesArr;
+                        }
+                        return newErrors;
+                      });
+                    }}
+                    disabled={form.files.length === 1}
+                    style={{
+                      padding: '6px 14px',
+                      borderRadius: 8,
+                      border: '1px solid #e57373',
+                      background: '#fff0f0',
+                      color: '#d32f2f',
+                      cursor: form.files.length === 1 ? 'not-allowed' : 'pointer',
+                    }}
+                  >
+                    Remove file
+                  </button>
+                </div>
               </div>
             ))}
           </div>
