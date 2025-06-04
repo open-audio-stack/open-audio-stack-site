@@ -384,6 +384,69 @@ export default function Home() {
                   </FormControl>
                 </div>
                 <div className={styles.formGroup}>
+                  <Autocomplete
+                    multiple
+                    options={Object.values(Architecture)}
+                    getOptionLabel={option => option}
+                    value={file.architectures}
+                    onChange={(_, value) => handleFileChange(index, 'architectures', value)}
+                    renderInput={params => (
+                      <TextField
+                        {...params}
+                        variant="filled"
+                        label="File architectures"
+                        error={!!(errors.files && errors.files[index]?.architectures)}
+                        helperText={errors.files && errors.files[index]?.architectures}
+                      />
+                    )}
+                    fullWidth
+                  />
+                </div>
+                <div className={styles.formGroup}>
+                  <Autocomplete
+                    multiple
+                    options={Object.values(PluginFormat)}
+                    getOptionLabel={option => option}
+                    value={file.contains}
+                    onChange={(_, value) => handleFileChange(index, 'contains', value)}
+                    renderInput={params => (
+                      <TextField
+                        {...params}
+                        variant="filled"
+                        label="File contains"
+                        error={!!(errors.files && errors.files[index]?.contains)}
+                        helperText={errors.files && errors.files[index]?.contains}
+                      />
+                    )}
+                    fullWidth
+                  />
+                </div>
+                <div className={styles.formGroup}>
+                  <Autocomplete
+                    multiple
+                    options={Object.values(SystemType)}
+                    getOptionLabel={option => option}
+                    value={file.systems.map(s => s.type)}
+                    onChange={(_, value) =>
+                      handleFileChange(
+                        index,
+                        'systems',
+                        value.map(type => ({ type })),
+                      )
+                    }
+                    renderInput={params => (
+                      <TextField
+                        {...params}
+                        variant="filled"
+                        label="File systems"
+                        error={!!(errors.files && errors.files[index]?.systems)}
+                        helperText={errors.files && errors.files[index]?.systems}
+                      />
+                    )}
+                    fullWidth
+                  />
+                </div>
+                <div className={styles.formGroup}>
                   <TextField
                     label="File url"
                     variant="filled"
