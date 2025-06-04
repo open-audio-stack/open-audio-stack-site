@@ -16,9 +16,11 @@
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@mui/material": "^7.1.0",
-    "@open-audio-stack/core": "^0.1.35",
+    "@open-audio-stack/core": "^0.1.36",
+    "ace-builds": "^1.42.0",
     "next": "15.3.2",
     "react": "^19.0.0",
+    "react-ace": "^14.0.1",
     "react-dom": "^19.0.0"
   },
   "devDependencies": {

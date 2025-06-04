@@ -4,7 +4,7 @@ import styles from '../styles/page.module.css';
 import { isSelected } from '../lib/path';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   fileTypes,
   licenses,
@@ -19,7 +19,8 @@ import {
   PluginType,
   PackageFileValidator,
   PluginFile,
-  packageToYaml,
+  packageJsToYaml,
+  packageYamlToJs,
 } from '@open-audio-stack/core';
 import {
   Autocomplete,
@@ -31,6 +32,11 @@ import {
   Select,
   TextField,
 } from '@mui/material';
+
+// Import ace-yaml mode and theme (make sure these are installed in your project)
+import AceEditor from 'react-ace';
+import 'ace-builds/src-noconflict/mode-yaml';
+import 'ace-builds/src-noconflict/theme-monokai';
 
 // Example data to show how the form populates
 /* eslint-disable  prefer-const */
@@ -119,6 +125,13 @@ export default function Home() {
   const [errors, setErrors] = useState({} as any);
   /* eslint-disable  @typescript-eslint/no-explicit-any */
   const [touched, setTouched] = useState({} as any);
+  const [yamlError, setYamlError] = useState<string | null>(null);
+
+  // yaml editor
+  const [yamlValue, setYamlValue] = useState(packageJsToYaml(form));
+  useEffect(() => {
+    setYamlValue(packageJsToYaml(form));
+  }, [form]);
 
   /* eslint-disable  @typescript-eslint/no-explicit-any */
   function handleChange(field: string, value: any) {
@@ -546,12 +559,52 @@ export default function Home() {
           </div>
           <div className={`${styles.card} ${styles.metadata}`}>
             <h4>Metadata</h4>
-            <pre className={styles.codeBlock}>{packageToYaml(form)}</pre>
+            <AceEditor
+              mode="yaml"
+              theme="monokai"
+              name="metadata-yaml-editor"
+              value={yamlValue}
+              onChange={val => {
+                setYamlValue(val);
+                try {
+                  const parsed = packageYamlToJs(val);
+                  // Only update form if parsed YAML is an object
+                  if (parsed && typeof parsed === 'object') {
+                    setForm(parsed as PluginInterface);
+                  }
+                  setYamlError(null);
+                } catch (e: any) {
+                  setYamlError(e.message || 'Invalid YAML');
+                }
+              }}
+              width="100%"
+              height="580px"
+              fontSize={16}
+              setOptions={{
+                useWorker: false,
+                showLineNumbers: true,
+                tabSize: 2,
+              }}
+              editorProps={{ $blockScrolling: true }}
+              style={{
+                borderRadius: 12,
+                border: '1px solid #e0e0e0',
+                marginBottom: 8,
+                fontFamily: 'Fira Mono, Consolas, monospace',
+              }}
+            />
+            {yamlError && (
+              <div
+                style={{ color: '#fff', background: '#d32f2f', borderRadius: 8, padding: '8px 14px', marginBottom: 12 }}
+              >
+                YAML Error: {yamlError}
+              </div>
+            )}
             <div style={{ display: 'flex', gap: 12, marginTop: 12 }}>
               <button
                 type="button"
                 onClick={() => {
-                  navigator.clipboard.writeText(packageToYaml(form));
+                  navigator.clipboard.writeText(packageJsToYaml(form));
                 }}
                 style={{
                   padding: '6px 18px',
@@ -566,7 +619,7 @@ export default function Home() {
               <button
                 type="button"
                 onClick={() => {
-                  const blob = new Blob([packageToYaml(form)], { type: 'text/yaml' });
+                  const blob = new Blob([packageJsToYaml(form)], { type: 'text/yaml' });
                   const url = URL.createObjectURL(blob);
                   const a = document.createElement('a');
                   a.href = url;
@@ -590,7 +643,7 @@ export default function Home() {
                 type="button"
                 onClick={() => {
                   const title = encodeURIComponent(`Plugin: ${form.name} (v${VERSION})`);
-                  const body = encodeURIComponent('```yaml\n' + packageToYaml(form) + '\n```');
+                  const body = encodeURIComponent('```yaml\n' + packageJsToYaml(form) + '\n```');
                   window.open(
                     `https://github.com/open-audio-stack/open-audio-stack-registry/issues/new?title=${title}&body=${body}`,
                     '_blank',
