@@ -44,6 +44,8 @@ import AceEditor from 'react-ace';
 import 'ace-builds/src-noconflict/mode-yaml';
 import 'ace-builds/src-noconflict/theme-monokai';
 
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+
 // Example data to show how the form populates
 /* eslint-disable  prefer-const */
 let VERSION: string = '1.3.1';
@@ -228,7 +230,7 @@ export default function Home() {
         <Link className={styles.logoLink} href="/">
           <Image
             className={styles.logo}
-            src="/images/open-audio-stack-logo.svg"
+            src={`${basePath}/images/open-audio-stack-logo.svg`}
             width={194}
             height={34}
             alt="Open Audio Stack logo"
