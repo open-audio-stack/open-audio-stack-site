@@ -22,9 +22,13 @@ import {
   packageJsToYaml,
   packageYamlToJs,
   RegistryPackages,
+  architectures,
+  pluginFormats,
+  systemTypes,
 } from '@open-audio-stack/core';
 import {
   Autocomplete,
+  Button,
   Chip,
   CircularProgress,
   FormControl,
@@ -253,10 +257,10 @@ export default function Home() {
       <section className={styles.section}>
         <main className={styles.mainColumns}>
           <div className={styles.card}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 8 }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <h4 style={{ margin: 0 }}>Details</h4>
               <FormControl variant="filled" size="small" style={{ minWidth: 260 }}>
-                <InputLabel id="plugin-select-label">Load plugin</InputLabel>
+                <InputLabel id="plugin-select-label">Load plugin metadata</InputLabel>
                 <Select
                   labelId="plugin-select-label"
                   value={selectedPlugin}
@@ -337,13 +341,13 @@ export default function Home() {
             </div>
             <div className={styles.formGroup}>
               <Autocomplete
-                options={[]} // You can provide tag suggestions here
+                options={[]}
                 freeSolo
                 value={form.tags}
                 onChange={(_, value) => handleChange('tags', value)}
                 renderTags={(value: readonly string[], getTagProps) =>
                   value.map((option: string, index: number) => (
-                    <Chip variant="outlined" label={option} {...getTagProps({ index })} key={option} />
+                    <Chip variant="filled" label={option} {...getTagProps({ index })} key={option} />
                   ))
                 }
                 renderInput={params => (
@@ -445,14 +449,47 @@ export default function Home() {
                       <span style={{ color: 'red', fontSize: 12 }}>{errors.files[index].type}</span>
                     )}
                   </FormControl>
+                  <Autocomplete
+                    multiple
+                    options={systemTypes}
+                    getOptionLabel={option => option.name}
+                    value={file.systems.map(
+                      s => systemTypes.find(sys => sys.value === s.type) || { value: s.type, name: s.type },
+                    )}
+                    onChange={(_, value) =>
+                      handleFileChange(
+                        index,
+                        'systems',
+                        value.map(v => ({ type: v.value })),
+                      )
+                    }
+                    renderInput={params => (
+                      <TextField
+                        {...params}
+                        variant="filled"
+                        label="File systems"
+                        error={!!(errors.files && errors.files[index]?.systems)}
+                        helperText={errors.files && errors.files[index]?.systems}
+                      />
+                    )}
+                    fullWidth
+                  />
                 </div>
                 <div className={styles.formGroup}>
                   <Autocomplete
                     multiple
-                    options={Object.values(Architecture)}
-                    getOptionLabel={option => option}
-                    value={file.architectures}
-                    onChange={(_, value) => handleFileChange(index, 'architectures', value)}
+                    options={architectures}
+                    getOptionLabel={option => option.name}
+                    value={file.architectures.map(
+                      a => architectures.find(arch => arch.value === a) || { value: a, name: a },
+                    )}
+                    onChange={(_, value) =>
+                      handleFileChange(
+                        index,
+                        'architectures',
+                        value.map(v => v.value),
+                      )
+                    }
                     renderInput={params => (
                       <TextField
                         {...params}
@@ -468,10 +505,16 @@ export default function Home() {
                 <div className={styles.formGroup}>
                   <Autocomplete
                     multiple
-                    options={Object.values(PluginFormat)}
-                    getOptionLabel={option => option}
-                    value={file.contains}
-                    onChange={(_, value) => handleFileChange(index, 'contains', value)}
+                    options={pluginFormats}
+                    getOptionLabel={option => option.name}
+                    value={file.contains.map(f => pluginFormats.find(fmt => fmt.value === f) || { value: f, name: f })}
+                    onChange={(_, value) =>
+                      handleFileChange(
+                        index,
+                        'contains',
+                        value.map(v => v.value),
+                      )
+                    }
                     renderInput={params => (
                       <TextField
                         {...params}
@@ -479,31 +522,6 @@ export default function Home() {
                         label="File contains"
                         error={!!(errors.files && errors.files[index]?.contains)}
                         helperText={errors.files && errors.files[index]?.contains}
-                      />
-                    )}
-                    fullWidth
-                  />
-                </div>
-                <div className={styles.formGroup}>
-                  <Autocomplete
-                    multiple
-                    options={Object.values(SystemType)}
-                    getOptionLabel={option => option}
-                    value={file.systems.map(s => s.type)}
-                    onChange={(_, value) =>
-                      handleFileChange(
-                        index,
-                        'systems',
-                        value.map(type => ({ type })),
-                      )
-                    }
-                    renderInput={params => (
-                      <TextField
-                        {...params}
-                        variant="filled"
-                        label="File systems"
-                        error={!!(errors.files && errors.files[index]?.systems)}
-                        helperText={errors.files && errors.files[index]?.systems}
                       />
                     )}
                     fullWidth
@@ -540,9 +558,9 @@ export default function Home() {
                     helperText={errors.files && errors.files[index]?.sha256}
                   />
                 </div>
-                <div className={styles.formGroup} style={{ marginTop: 8 }}>
-                  <button
-                    type="button"
+                <div className={styles.formGroup}>
+                  <Button
+                    variant="outlined"
                     onClick={() => {
                       const blankFile: PluginFile = {
                         architectures: [],
@@ -565,19 +583,12 @@ export default function Home() {
                         return newErrors;
                       });
                     }}
-                    style={{
-                      marginRight: 8,
-                      padding: '6px 14px',
-                      borderRadius: 8,
-                      border: '1px solid #ccc',
-                      background: '#f7f7f7',
-                      cursor: 'pointer',
-                    }}
                   >
-                    Add file
-                  </button>
-                  <button
-                    type="button"
+                    + Add file
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    color="error"
                     onClick={() => {
                       const newFiles = form.files.filter((_, i) => i !== index);
                       updateForm('files', newFiles);
@@ -592,17 +603,9 @@ export default function Home() {
                       });
                     }}
                     disabled={form.files.length === 1}
-                    style={{
-                      padding: '6px 14px',
-                      borderRadius: 8,
-                      border: '1px solid #e57373',
-                      background: '#fff0f0',
-                      color: '#d32f2f',
-                      cursor: form.files.length === 1 ? 'not-allowed' : 'pointer',
-                    }}
                   >
-                    Remove file
-                  </button>
+                    - Remove file
+                  </Button>
                 </div>
               </div>
             ))}
@@ -650,24 +653,17 @@ export default function Home() {
                 YAML Error: {yamlError}
               </div>
             )}
-            <div style={{ display: 'flex', gap: 12, marginTop: 12 }}>
-              <button
-                type="button"
+            <div style={{ display: 'flex', gap: 12, justifyContent: 'end' }}>
+              <Button
+                variant="outlined"
                 onClick={() => {
                   navigator.clipboard.writeText(packageJsToYaml(form));
                 }}
-                style={{
-                  padding: '6px 18px',
-                  borderRadius: 8,
-                  border: '1px solid #ccc',
-                  background: '#f7f7f7',
-                  cursor: 'pointer',
-                }}
               >
                 Copy
-              </button>
-              <button
-                type="button"
+              </Button>
+              <Button
+                variant="outlined"
                 onClick={() => {
                   const blob = new Blob([packageJsToYaml(form)], { type: 'text/yaml' });
                   const url = URL.createObjectURL(blob);
@@ -679,18 +675,12 @@ export default function Home() {
                   document.body.removeChild(a);
                   URL.revokeObjectURL(url);
                 }}
-                style={{
-                  padding: '6px 18px',
-                  borderRadius: 8,
-                  border: '1px solid #ccc',
-                  background: '#f7f7f7',
-                  cursor: 'pointer',
-                }}
               >
                 Download
-              </button>
-              <button
-                type="button"
+              </Button>
+              <Button
+                variant="contained"
+                color="inherit"
                 onClick={() => {
                   const title = encodeURIComponent(`Plugin: ${form.name} (v${VERSION})`);
                   const body = encodeURIComponent('```yaml\n' + packageJsToYaml(form) + '\n```');
@@ -699,17 +689,9 @@ export default function Home() {
                     '_blank',
                   );
                 }}
-                style={{
-                  padding: '6px 18px',
-                  borderRadius: 8,
-                  border: '1px solid #232323',
-                  background: '#232323',
-                  color: '#fff',
-                  cursor: 'pointer',
-                }}
               >
                 Submit via GitHub
-              </button>
+              </Button>
             </div>
           </div>
         </main>
