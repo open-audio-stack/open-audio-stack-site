@@ -1,7 +1,7 @@
 'use client';
 import Image from 'next/image';
 import styles from '../styles/page.module.css';
-import { isSelected } from '../lib/path';
+import { getBasePath, isSelected } from '../lib/path';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -43,8 +43,6 @@ import {
 import AceEditor from 'react-ace';
 import 'ace-builds/src-noconflict/mode-yaml';
 import 'ace-builds/src-noconflict/theme-monokai';
-
-const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
 
 // Example data to show how the form populates
 /* eslint-disable  prefer-const */
@@ -230,7 +228,7 @@ export default function Home() {
         <Link className={styles.logoLink} href="/">
           <Image
             className={styles.logo}
-            src={`${basePath}/images/open-audio-stack-logo.svg`}
+            src={`${getBasePath()}/images/open-audio-stack-logo.svg`}
             width={194}
             height={34}
             alt="Open Audio Stack logo"

@@ -1,9 +1,6 @@
-// import { usePathname } from 'next/navigation';
-// import { use } from 'react';
-
-// export function getBasePath() {
-//   return usePathname;
-// }
+export function getBasePath() {
+  return process.env.CI ? '/open-audio-stack-site' : '';
+}
 
 // export function getCrumbUrl(items: string[], itemToMatch: string) {
 //   let url: string = '';
