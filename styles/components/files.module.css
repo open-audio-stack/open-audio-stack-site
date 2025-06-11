@@ -1,0 +1,20 @@
+.cardInner {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.formGroup {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+
+.file {
+  border: 1px solid #e2e2e2;
+  border-radius: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+}
