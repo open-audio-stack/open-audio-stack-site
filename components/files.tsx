@@ -14,7 +14,7 @@ import {
 
 type FilesProps = {
   form: PluginInterface;
-  setForm: Dispatch<SetStateAction<PluginInterface>>;
+  setForm: Dispatch<SetStateAction<PluginInterface | null>>;
 };
 
 type FilesError = {
@@ -101,7 +101,7 @@ const Files = ({ form, setForm }: FilesProps) => {
   }
 
   function updateForm(field: keyof PluginInterface, value: PluginFile[]) {
-    setForm(f => ({ ...f, [field]: value }));
+    setForm(f => (f ? { ...f, [field]: value } : f));
     setTouched(t => ({ ...t, [field]: true }));
   }
 
@@ -129,7 +129,7 @@ const Files = ({ form, setForm }: FilesProps) => {
                 ))}
               </Select>
               {touched.files && errors.files && errors.files[index]?.type && (
-                <span style={{ color: 'red', fontSize: 12 }}>{errors.files[index].type}</span>
+                <span className={styles.error}>{errors.files[index].type}</span>
               )}
             </FormControl>
             <Autocomplete

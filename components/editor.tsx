@@ -2,12 +2,13 @@ import AceEditor from 'react-ace';
 import 'ace-builds/src-noconflict/mode-yaml';
 import 'ace-builds/src-noconflict/theme-monokai';
 import { packageJsToYaml, packageYamlToJs, PluginInterface } from '@open-audio-stack/core';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState, useRef } from 'react';
 import { Button } from '@mui/material';
+import styles from '../styles/components/editor.module.css';
 
 type EditorProps = {
   form: PluginInterface;
-  setForm: Dispatch<SetStateAction<PluginInterface>>;
+  setForm: Dispatch<SetStateAction<PluginInterface | null>>;
 };
 
 interface EditorError {
@@ -44,13 +45,11 @@ const handleSubmitViaGitHub = (form: PluginInterface) => {
   );
 };
 
-const handleEditorChange = (
+const parseYamlToForm = (
   val: string,
-  setYamlValue: (v: string) => void,
-  setForm: Dispatch<SetStateAction<PluginInterface>>,
+  setForm: Dispatch<SetStateAction<PluginInterface | null>>,
   setYamlError: (e: string | null) => void,
 ) => {
-  setYamlValue(val);
   try {
     const parsed = packageYamlToJs(val);
     if (parsed && typeof parsed === 'object') {
@@ -66,19 +65,31 @@ const handleEditorChange = (
 const Editor = ({ form, setForm }: EditorProps) => {
   const [yamlError, setYamlError] = useState<string | null>(null);
   const [yamlValue, setYamlValue] = useState(packageJsToYaml(form));
+  const debounceRef = useRef<NodeJS.Timeout | null>(null);
+
   useEffect(() => {
     setYamlValue(packageJsToYaml(form));
   }, [form]);
+
+  // Debounced editor change handler
+  const handleEditorChange = (val: string) => {
+    setYamlValue(val);
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      parseYamlToForm(val, setForm, setYamlError);
+    }, 400); // 400ms debounce
+  };
 
   return (
     <div>
       <h4>Metadata</h4>
       <AceEditor
+        className={styles.ace}
         mode="yaml"
         theme="monokai"
         name="metadata-yaml-editor"
         value={yamlValue}
-        onChange={val => handleEditorChange(val, setYamlValue, setForm, setYamlError)}
+        onChange={handleEditorChange}
         width="100%"
         height="580px"
         fontSize={16}
@@ -88,19 +99,9 @@ const Editor = ({ form, setForm }: EditorProps) => {
           tabSize: 2,
         }}
         editorProps={{ $blockScrolling: true }}
-        style={{
-          borderRadius: 12,
-          border: '1px solid #e0e0e0',
-          marginBottom: 8,
-          fontFamily: 'Fira Mono, Consolas, monospace',
-        }}
       />
-      {yamlError && (
-        <div style={{ color: '#fff', background: '#d32f2f', borderRadius: 8, padding: '8px 14px', marginBottom: 12 }}>
-          YAML Error: {yamlError}
-        </div>
-      )}
-      <div style={{ display: 'flex', gap: 12, justifyContent: 'end' }}>
+      {yamlError && <div className={styles.error}>YAML Error: {yamlError}</div>}
+      <div className={styles.buttons}>
         <Button variant="outlined" onClick={() => handleCopy(form)}>
           Copy
         </Button>

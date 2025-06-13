@@ -1,9 +1,12 @@
 import { CircularProgress, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import { PluginInterface, RegistryPackages } from '@open-audio-stack/core';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import styles from '../styles/components/selector.module.css';
 
 type SelectorProps = {
-  setForm: Dispatch<SetStateAction<PluginInterface>>;
+  setForm: Dispatch<SetStateAction<PluginInterface | null>>;
+  selectedPlugin: string;
+  setSelectedPlugin: Dispatch<SetStateAction<string>>;
 };
 
 const PLUGIN_LIST_URL = 'https://open-audio-stack.github.io/open-audio-stack-registry/plugins/';
@@ -21,10 +24,9 @@ const fetchPluginData = async (selectedPlugin: string): Promise<PluginInterface>
   return res.json();
 };
 
-const Selector = ({ setForm }: SelectorProps) => {
+const Selector = ({ setForm, selectedPlugin, setSelectedPlugin }: SelectorProps) => {
   const [pluginList, setPluginList] = useState<string[]>([]);
   const [pluginLoading, setPluginLoading] = useState(false);
-  const [selectedPlugin, setSelectedPlugin] = useState<string>('');
 
   useEffect(() => {
     setPluginLoading(true);
@@ -52,16 +54,15 @@ const Selector = ({ setForm }: SelectorProps) => {
   );
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-      <h4 style={{ margin: 0 }}>Details</h4>
-      <FormControl variant="filled" size="small" style={{ minWidth: 260 }}>
+    <div className={styles.selector}>
+      <h4>Details</h4>
+      <FormControl variant="filled" size="small">
         <InputLabel id="plugin-select-label">Load plugin metadata</InputLabel>
         <Select
           labelId="plugin-select-label"
           value={selectedPlugin}
           onChange={handleChange}
           disabled={pluginLoading || pluginList.length === 0}
-          style={{ background: '#fff' }}
         >
           {pluginList.map(renderMenuItem)}
         </Select>

@@ -16,7 +16,7 @@ import { Dispatch, SetStateAction, useState, SyntheticEvent } from 'react';
 
 type DetailsProps = {
   form: PluginInterface;
-  setForm: Dispatch<SetStateAction<PluginInterface>>;
+  setForm: Dispatch<SetStateAction<PluginInterface | null>>;
 };
 
 /* eslint-disable  prefer-const */
@@ -28,7 +28,7 @@ const Details = ({ form, setForm }: DetailsProps) => {
 
   function handleChange(field: keyof PluginInterface, value: string | string[]) {
     handleValidate({ ...form, [field]: value } as PluginInterface);
-    setForm((f: PluginInterface) => ({ ...f, [field]: value }));
+    setForm(f => (f ? { ...f, [field]: value } : f));
     setTouched((t: Record<string, boolean>) => ({ ...t, [field]: true }));
   }
 
