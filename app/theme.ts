@@ -58,6 +58,15 @@ const theme = createTheme({
         },
       },
     },
+    MuiInputLabel: {
+      styleOverrides: {
+        root: {
+          '&.label-dark': {
+            color: '#fff',
+          },
+        },
+      },
+    },
     MuiSelect: {
       styleOverrides: {
         select: {
@@ -71,6 +80,22 @@ const theme = createTheme({
         filled: {
           borderRadius: 10,
           backgroundColor: '#FAFAFA',
+        },
+        root: {
+          '&.select-dark': {
+            backgroundColor: '#000',
+            color: '#fff',
+            '.MuiSelect-select': {
+              backgroundColor: '#000',
+              color: '#fff',
+            },
+            '& .MuiInputLabel-root': {
+              color: '#fff',
+            },
+            '& .MuiSelect-icon': {
+              color: '#fff',
+            },
+          },
         },
       },
     },

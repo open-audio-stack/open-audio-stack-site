@@ -57,8 +57,11 @@ const Selector = ({ setForm, selectedPlugin, setSelectedPlugin }: SelectorProps)
     <div className={styles.selector}>
       <h4>Details</h4>
       <FormControl variant="filled" size="small">
-        <InputLabel id="plugin-select-label">Load plugin metadata</InputLabel>
+        <InputLabel id="plugin-select-label" className="label-dark">
+          Load plugin metadata
+        </InputLabel>
         <Select
+          className="select-dark"
           labelId="plugin-select-label"
           value={selectedPlugin}
           onChange={handleChange}
