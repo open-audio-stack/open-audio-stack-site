@@ -17,14 +17,70 @@ type FilesProps = {
   setForm: Dispatch<SetStateAction<PluginInterface>>;
 };
 
-const Files = ({ form, setForm }: FilesProps) => {
-  /* eslint-disable  @typescript-eslint/no-explicit-any */
-  const [errors, setErrors] = useState({} as any);
-  /* eslint-disable  @typescript-eslint/no-explicit-any */
-  const [touched, setTouched] = useState({} as any);
+type FilesError = {
+  files?: Array<Partial<Record<keyof PluginFile, string>>>;
+};
 
-  function handleFileChange(index: number, field: string, value: any) {
-    console.log('handleFileChange', field, value);
+type FilesTouched = {
+  files?: Array<Partial<Record<keyof PluginFile, boolean>>>;
+};
+
+function getBlankFile(): PluginFile {
+  return {
+    architectures: [],
+    contains: [],
+    sha256: '',
+    systems: [],
+    size: 0,
+    type: FileType.Installer,
+    url: '',
+  };
+}
+
+function handleAddFile(
+  index: number,
+  form: PluginInterface,
+  updateForm: (field: keyof PluginInterface, value: PluginFile[]) => void,
+  setErrors: React.Dispatch<React.SetStateAction<FilesError>>,
+) {
+  const blankFile = getBlankFile();
+  const newFiles = [...form.files.slice(0, index + 1), blankFile, ...form.files.slice(index + 1)];
+  updateForm('files', newFiles);
+  setErrors(prev => {
+    const newErrors: FilesError = { ...prev };
+    if (newErrors.files) {
+      const filesArr = Array.isArray(newErrors.files) ? [...newErrors.files] : [];
+      filesArr.splice(index + 1, 0, {});
+      newErrors.files = filesArr;
+    }
+    return newErrors;
+  });
+}
+
+function handleRemoveFile(
+  index: number,
+  form: PluginInterface,
+  updateForm: (field: keyof PluginInterface, value: PluginFile[]) => void,
+  setErrors: React.Dispatch<React.SetStateAction<FilesError>>,
+) {
+  const newFiles = form.files.filter((_, i) => i !== index);
+  updateForm('files', newFiles);
+  setErrors(prev => {
+    const newErrors: FilesError = { ...prev };
+    if (newErrors.files) {
+      const filesArr = Array.isArray(newErrors.files) ? [...newErrors.files] : [];
+      filesArr.splice(index, 1);
+      newErrors.files = filesArr;
+    }
+    return newErrors;
+  });
+}
+
+const Files = ({ form, setForm }: FilesProps) => {
+  const [errors, setErrors] = useState<FilesError>({});
+  const [touched, setTouched] = useState<FilesTouched>({});
+
+  function handleFileChange(index: number, field: keyof PluginFile, value: unknown) {
     const updatedFiles = form.files.map((file, i) => (i === index ? { ...file, [field]: value } : file));
     handleFileValidate(index, updatedFiles[index]);
     updateForm('files', updatedFiles);
@@ -33,26 +89,20 @@ const Files = ({ form, setForm }: FilesProps) => {
   function handleFileValidate(index: number, data: PluginFile) {
     const result = PackageFileValidator.safeParse(data);
     if (!result.success) {
-      /* eslint-disable  @typescript-eslint/no-explicit-any */
-      const fieldErrors: any = {
-        files: [],
-      };
-      if (!fieldErrors.files[index]) fieldErrors.files[index] = {};
+      const fieldErrors: FilesError = { files: [] };
+      if (!fieldErrors.files![index]) fieldErrors.files![index] = {};
       result.error.errors.forEach(e => {
-        if (e.path[0]) fieldErrors.files[index][e.path[0]] = e.message;
+        if (e.path[0]) fieldErrors.files![index][e.path[0] as keyof PluginFile] = e.message;
       });
-      console.log('handleFileValidate errors:', fieldErrors);
       setErrors(fieldErrors);
     } else {
       setErrors({});
     }
   }
 
-  function updateForm(field: string, value: any) {
-    /* eslint-disable  @typescript-eslint/no-explicit-any */
-    setForm((f: any) => ({ ...f, [field]: value }));
-    /* eslint-disable  @typescript-eslint/no-explicit-any */
-    setTouched((t: any) => ({ ...t, [field]: true }));
+  function updateForm(field: keyof PluginInterface, value: PluginFile[]) {
+    setForm(f => ({ ...f, [field]: value }));
+    setTouched(t => ({ ...t, [field]: true }));
   }
 
   return (
@@ -190,49 +240,13 @@ const Files = ({ form, setForm }: FilesProps) => {
             />
           </div>
           <div className={styles.formGroup}>
-            <Button
-              variant="outlined"
-              onClick={() => {
-                const blankFile: PluginFile = {
-                  architectures: [],
-                  contains: [],
-                  sha256: '',
-                  systems: [],
-                  size: 0,
-                  type: FileType.Installer,
-                  url: '',
-                };
-                const newFiles = [...form.files.slice(0, index + 1), blankFile, ...form.files.slice(index + 1)];
-                updateForm('files', newFiles);
-                setErrors((prev: any) => {
-                  const newErrors = { ...prev };
-                  if (newErrors.files) {
-                    const filesArr = Array.isArray(newErrors.files) ? [...newErrors.files] : [];
-                    filesArr.splice(index + 1, 0, {});
-                    newErrors.files = filesArr;
-                  }
-                  return newErrors;
-                });
-              }}
-            >
+            <Button variant="outlined" onClick={() => handleAddFile(index, form, updateForm, setErrors)}>
               + Add file
             </Button>
             <Button
               variant="outlined"
               color="error"
-              onClick={() => {
-                const newFiles = form.files.filter((_, i) => i !== index);
-                updateForm('files', newFiles);
-                setErrors((prev: any) => {
-                  const newErrors = { ...prev };
-                  if (newErrors.files) {
-                    const filesArr = Array.isArray(newErrors.files) ? [...newErrors.files] : [];
-                    filesArr.splice(index, 1);
-                    newErrors.files = filesArr;
-                  }
-                  return newErrors;
-                });
-              }}
+              onClick={() => handleRemoveFile(index, form, updateForm, setErrors)}
               disabled={form.files.length === 1}
             >
               - Remove file

@@ -1,9 +1,24 @@
-import { CircularProgress, FormControl, InputLabel, MenuItem, Select } from '@mui/material';
+import { CircularProgress, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import { PluginInterface, RegistryPackages } from '@open-audio-stack/core';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 
 type SelectorProps = {
   setForm: Dispatch<SetStateAction<PluginInterface>>;
+};
+
+const PLUGIN_LIST_URL = 'https://open-audio-stack.github.io/open-audio-stack-registry/plugins/';
+
+const fetchPluginList = async (): Promise<string[]> => {
+  const res = await fetch(PLUGIN_LIST_URL);
+  const packages: RegistryPackages = await res.json();
+  const ids = Object.keys(packages).map((key: string) => `${packages[key].slug}/${packages[key].version}`);
+  ids.sort();
+  return ids;
+};
+
+const fetchPluginData = async (selectedPlugin: string): Promise<PluginInterface> => {
+  const res = await fetch(`${PLUGIN_LIST_URL}${selectedPlugin}/`);
+  return res.json();
 };
 
 const Selector = ({ setForm }: SelectorProps) => {
@@ -13,29 +28,28 @@ const Selector = ({ setForm }: SelectorProps) => {
 
   useEffect(() => {
     setPluginLoading(true);
-    fetch('https://open-audio-stack.github.io/open-audio-stack-registry/plugins/')
-      .then(res => res.json())
-      .then((packages: RegistryPackages) => {
-        const ids = Object.keys(packages).map((key: string) => `${packages[key].slug}/${packages[key].version}`);
-        ids.sort();
-        setPluginList(ids);
-        setPluginLoading(false);
-      })
-      .catch(() => setPluginLoading(false));
+    fetchPluginList()
+      .then(ids => setPluginList(ids))
+      .finally(() => setPluginLoading(false));
   }, []);
 
   useEffect(() => {
     if (!selectedPlugin) return;
     setPluginLoading(true);
-    fetch(`https://open-audio-stack.github.io/open-audio-stack-registry/plugins/${selectedPlugin}/`)
-      .then(res => res.json())
-      /* eslint-disable  @typescript-eslint/no-explicit-any */
-      .then((data: any) => {
-        setForm(data);
-        setPluginLoading(false);
-      })
-      .catch(() => setPluginLoading(false));
+    fetchPluginData(selectedPlugin)
+      .then(data => setForm(data))
+      .finally(() => setPluginLoading(false));
   }, [selectedPlugin, setForm]);
+
+  const handleChange = (event: SelectChangeEvent) => {
+    setSelectedPlugin(event.target.value as string);
+  };
+
+  const renderMenuItem = (id: string) => (
+    <MenuItem value={id} key={id}>
+      {id}
+    </MenuItem>
+  );
 
   return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -45,15 +59,11 @@ const Selector = ({ setForm }: SelectorProps) => {
         <Select
           labelId="plugin-select-label"
           value={selectedPlugin}
-          onChange={e => setSelectedPlugin(e.target.value)}
+          onChange={handleChange}
           disabled={pluginLoading || pluginList.length === 0}
           style={{ background: '#fff' }}
         >
-          {pluginList.map(id => (
-            <MenuItem value={id} key={id}>
-              {id}
-            </MenuItem>
-          ))}
+          {pluginList.map(renderMenuItem)}
         </Select>
       </FormControl>
       {pluginLoading && <CircularProgress size={22} />}
