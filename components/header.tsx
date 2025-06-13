@@ -21,8 +21,8 @@ const Header = ({ pathname }: HeaderProps) => (
     <nav className={styles.nav}>
       <ul>
         <li>
-          <Link href="/" className={isSelected(pathname, `/`)}>
-            <span className={pathname === '/' ? styles.selectedTab : ''}>plugin</span>
+          <Link href="/plugin" className={isSelected(pathname, `/plugin`)}>
+            <span className={pathname === '/plugin' ? styles.selectedTab : ''}>plugin</span>
           </Link>
         </li>
         <li>

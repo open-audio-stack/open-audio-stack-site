@@ -1,13 +1,14 @@
 import AceEditor from 'react-ace';
 import 'ace-builds/src-noconflict/mode-yaml';
 import 'ace-builds/src-noconflict/theme-monokai';
-import { packageJsToYaml, packageYamlToJs, PackageVersion } from '@open-audio-stack/core';
+import { packageJsToYaml, packageYamlToJs, PackageVersion, RegistryType } from '@open-audio-stack/core';
 import { Dispatch, SetStateAction, useEffect, useState, useRef } from 'react';
 import { Button } from '@mui/material';
 import styles from '../styles/components/editor.module.css';
 
 type EditorProps = {
   form: PackageVersion;
+  pkgType: RegistryType;
   setForm: Dispatch<SetStateAction<PackageVersion | null>>;
 };
 
@@ -36,8 +37,8 @@ const handleDownload = (form: PackageVersion) => {
   URL.revokeObjectURL(url);
 };
 
-const handleSubmitViaGitHub = (form: PackageVersion) => {
-  const title = encodeURIComponent(`Package: ${form.name} (v${VERSION})`);
+const handleSubmitViaGitHub = (pkgType: RegistryType, form: PackageVersion) => {
+  const title = encodeURIComponent(`${pkgType}: ${form.name} (v${VERSION})`);
   const body = encodeURIComponent('```yaml\n' + packageJsToYaml(form) + '\n```');
   window.open(
     `https://github.com/open-audio-stack/open-audio-stack-registry/issues/new?title=${title}&body=${body}`,
@@ -62,7 +63,7 @@ const parseYamlToForm = (
   }
 };
 
-const Editor = ({ form, setForm }: EditorProps) => {
+const Editor = ({ form, pkgType, setForm }: EditorProps) => {
   const [yamlError, setYamlError] = useState<string | null>(null);
   const [yamlValue, setYamlValue] = useState(packageJsToYaml(form));
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
@@ -108,7 +109,7 @@ const Editor = ({ form, setForm }: EditorProps) => {
         <Button variant="outlined" onClick={() => handleDownload(form)}>
           Download
         </Button>
-        <Button variant="contained" color="inherit" onClick={() => handleSubmitViaGitHub(form)}>
+        <Button variant="contained" color="inherit" onClick={() => handleSubmitViaGitHub(pkgType, form)}>
           Submit via GitHub
         </Button>
       </div>
