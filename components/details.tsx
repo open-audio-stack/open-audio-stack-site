@@ -11,28 +11,36 @@ import {
 } from '@mui/material';
 import { SelectChangeEvent } from '@mui/material/Select';
 import styles from '../styles/components/details.module.css';
-import { licenses, PackageVersionValidator, PluginInterface, pluginTypes } from '@open-audio-stack/core';
+import {
+  licenses,
+  PackageVersionValidator,
+  PackageVersion,
+  PluginTypeOption,
+  ProjectTypeOption,
+  PresetTypeOption,
+} from '@open-audio-stack/core';
 import { Dispatch, SetStateAction, useState, SyntheticEvent } from 'react';
 
 type DetailsProps = {
-  form: PluginInterface;
-  setForm: Dispatch<SetStateAction<PluginInterface | null>>;
+  form: PackageVersion;
+  pkgTypes: PluginTypeOption[] | PresetTypeOption[] | ProjectTypeOption[];
+  setForm: Dispatch<SetStateAction<PackageVersion | null>>;
 };
 
 /* eslint-disable  prefer-const */
 let VERSION: string = '1.3.1';
 
-const Details = ({ form, setForm }: DetailsProps) => {
+const Details = ({ form, pkgTypes, setForm }: DetailsProps) => {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
 
-  function handleChange(field: keyof PluginInterface, value: string | string[]) {
-    handleValidate({ ...form, [field]: value } as PluginInterface);
+  function handleChange(field: keyof PackageVersion, value: string | string[]) {
+    handleValidate({ ...form, [field]: value } as PackageVersion);
     setForm(f => (f ? { ...f, [field]: value } : f));
     setTouched((t: Record<string, boolean>) => ({ ...t, [field]: true }));
   }
 
-  function handleValidate(data: PluginInterface) {
+  function handleValidate(data: PackageVersion) {
     const result = PackageVersionValidator.safeParse(data);
     if (!result.success) {
       const fieldErrors: Record<string, string> = {};
@@ -73,11 +81,11 @@ const Details = ({ form, setForm }: DetailsProps) => {
     );
   }
 
-  function handleInputChange(field: keyof PluginInterface) {
+  function handleInputChange(field: keyof PackageVersion) {
     return (e: React.ChangeEvent<HTMLInputElement>) => handleChange(field, e.target.value);
   }
 
-  function handleSelectChange(field: keyof PluginInterface) {
+  function handleSelectChange(field: keyof PackageVersion) {
     return (e: SelectChangeEvent<string>) => handleChange(field, e.target.value);
   }
 
@@ -120,9 +128,9 @@ const Details = ({ form, setForm }: DetailsProps) => {
         <FormControl variant="filled" fullWidth error={!!errors.type && touched.type}>
           <InputLabel id="label-type">Type</InputLabel>
           <Select label="Type" labelId="label-type" value={form.type} onChange={handleSelectChange('type')}>
-            {pluginTypes.map(pluginType => (
-              <MenuItem value={pluginType.value} key={pluginType.value}>
-                {pluginType.name}
+            {pkgTypes.map(pkgType => (
+              <MenuItem value={pkgType.value} key={pkgType.value}>
+                {pkgType.name}
               </MenuItem>
             ))}
           </Select>

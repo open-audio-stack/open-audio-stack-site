@@ -1,14 +1,14 @@
 import AceEditor from 'react-ace';
 import 'ace-builds/src-noconflict/mode-yaml';
 import 'ace-builds/src-noconflict/theme-monokai';
-import { packageJsToYaml, packageYamlToJs, PluginInterface } from '@open-audio-stack/core';
+import { packageJsToYaml, packageYamlToJs, PackageVersion } from '@open-audio-stack/core';
 import { Dispatch, SetStateAction, useEffect, useState, useRef } from 'react';
 import { Button } from '@mui/material';
 import styles from '../styles/components/editor.module.css';
 
 type EditorProps = {
-  form: PluginInterface;
-  setForm: Dispatch<SetStateAction<PluginInterface | null>>;
+  form: PackageVersion;
+  setForm: Dispatch<SetStateAction<PackageVersion | null>>;
 };
 
 interface EditorError {
@@ -20,24 +20,24 @@ interface EditorError {
 
 const VERSION: string = '1.3.1';
 
-const handleCopy = (form: PluginInterface) => {
+const handleCopy = (form: PackageVersion) => {
   navigator.clipboard.writeText(packageJsToYaml(form));
 };
 
-const handleDownload = (form: PluginInterface) => {
+const handleDownload = (form: PackageVersion) => {
   const blob = new Blob([packageJsToYaml(form)], { type: 'text/yaml' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = `${form.name || 'plugin'}.yaml`;
+  a.download = `${form.name || 'package'}.yaml`;
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
 };
 
-const handleSubmitViaGitHub = (form: PluginInterface) => {
-  const title = encodeURIComponent(`Plugin: ${form.name} (v${VERSION})`);
+const handleSubmitViaGitHub = (form: PackageVersion) => {
+  const title = encodeURIComponent(`Package: ${form.name} (v${VERSION})`);
   const body = encodeURIComponent('```yaml\n' + packageJsToYaml(form) + '\n```');
   window.open(
     `https://github.com/open-audio-stack/open-audio-stack-registry/issues/new?title=${title}&body=${body}`,
@@ -47,13 +47,13 @@ const handleSubmitViaGitHub = (form: PluginInterface) => {
 
 const parseYamlToForm = (
   val: string,
-  setForm: Dispatch<SetStateAction<PluginInterface | null>>,
+  setForm: Dispatch<SetStateAction<PackageVersion | null>>,
   setYamlError: (e: string | null) => void,
 ) => {
   try {
     const parsed = packageYamlToJs(val);
     if (parsed && typeof parsed === 'object') {
-      setForm(parsed as PluginInterface);
+      setForm(parsed as PackageVersion);
     }
     setYamlError(null);
   } catch (e: unknown) {

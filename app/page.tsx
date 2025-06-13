@@ -2,7 +2,7 @@
 import styles from '../styles/page.module.css';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { PluginInterface } from '@open-audio-stack/core';
+import { PackageVersion, pluginFormats, pluginTypes, RegistryType } from '@open-audio-stack/core';
 
 import Header from '../components/header';
 import Selector from '../components/selector';
@@ -10,15 +10,19 @@ import Details from '../components/details';
 import Files from '../components/files';
 import Editor from '../components/editor';
 
-const DEFAULT_PLUGIN = 'surge-synthesizer/surge/1.3.4';
+const ROOT_URL = `https://open-audio-stack.github.io/open-audio-stack-registry`;
+const PKG: string = 'surge-synthesizer/surge/1.3.4';
+const PKG_FORMATS = pluginFormats;
+const PKG_TYPE: RegistryType = RegistryType.Plugins;
+const PKG_TYPES = pluginTypes;
 
 export default function Home() {
   const pathname = usePathname();
-  const [form, setForm] = useState<PluginInterface | null>(null);
-  const [selectedPlugin, setSelectedPlugin] = useState(DEFAULT_PLUGIN);
+  const [form, setForm] = useState<PackageVersion | null>(null);
+  const [selectedPkg, setSelectedPkg] = useState(PKG);
 
   useEffect(() => {
-    fetch(`https://open-audio-stack.github.io/open-audio-stack-registry/plugins/${DEFAULT_PLUGIN}/`)
+    fetch(`${ROOT_URL}/${PKG_TYPE}/${PKG}/`)
       .then(res => res.json())
       .then(data => setForm(data));
   }, []);
@@ -30,11 +34,16 @@ export default function Home() {
         {form ? (
           <main className={styles.mainColumns}>
             <div className={styles.card}>
-              <Selector setForm={setForm} selectedPlugin={selectedPlugin} setSelectedPlugin={setSelectedPlugin} />
-              <Details form={form} setForm={setForm} />
+              <Selector
+                setForm={setForm}
+                selectedPkg={selectedPkg}
+                setSelectedPkg={setSelectedPkg}
+                url={`${ROOT_URL}/${PKG_TYPE}`}
+              />
+              <Details form={form} pkgTypes={PKG_TYPES} setForm={setForm} />
             </div>
             <div className={styles.card}>
-              <Files form={form} setForm={setForm} />
+              <Files form={form} pkgFormats={PKG_FORMATS} setForm={setForm} />
             </div>
             <div className={`${styles.card} ${styles.metadata}`}>
               <Editor form={form} setForm={setForm} />

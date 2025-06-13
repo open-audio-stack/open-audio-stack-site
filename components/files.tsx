@@ -6,26 +6,29 @@ import {
   FileType,
   fileTypes,
   PackageFileValidator,
-  PluginFile,
-  pluginFormats,
-  PluginInterface,
+  PackageFile,
+  PackageVersion,
   systemTypes,
+  PluginFormatOption,
+  PresetFormatOption,
+  ProjectFormatOption,
 } from '@open-audio-stack/core';
 
 type FilesProps = {
-  form: PluginInterface;
-  setForm: Dispatch<SetStateAction<PluginInterface | null>>;
+  form: PackageVersion;
+  pkgFormats: PluginFormatOption[] | PresetFormatOption[] | ProjectFormatOption[];
+  setForm: Dispatch<SetStateAction<PackageVersion | null>>;
 };
 
 type FilesError = {
-  files?: Array<Partial<Record<keyof PluginFile, string>>>;
+  files?: Array<Partial<Record<keyof PackageFile, string>>>;
 };
 
 type FilesTouched = {
-  files?: Array<Partial<Record<keyof PluginFile, boolean>>>;
+  files?: Array<Partial<Record<keyof PackageFile, boolean>>>;
 };
 
-function getBlankFile(): PluginFile {
+function getBlankFile(): PackageFile {
   return {
     architectures: [],
     contains: [],
@@ -39,8 +42,8 @@ function getBlankFile(): PluginFile {
 
 function handleAddFile(
   index: number,
-  form: PluginInterface,
-  updateForm: (field: keyof PluginInterface, value: PluginFile[]) => void,
+  form: PackageVersion,
+  updateForm: (field: keyof PackageVersion, value: PackageFile[]) => void,
   setErrors: React.Dispatch<React.SetStateAction<FilesError>>,
 ) {
   const blankFile = getBlankFile();
@@ -59,8 +62,8 @@ function handleAddFile(
 
 function handleRemoveFile(
   index: number,
-  form: PluginInterface,
-  updateForm: (field: keyof PluginInterface, value: PluginFile[]) => void,
+  form: PackageVersion,
+  updateForm: (field: keyof PackageVersion, value: PackageFile[]) => void,
   setErrors: React.Dispatch<React.SetStateAction<FilesError>>,
 ) {
   const newFiles = form.files.filter((_, i) => i !== index);
@@ -76,23 +79,23 @@ function handleRemoveFile(
   });
 }
 
-const Files = ({ form, setForm }: FilesProps) => {
+const Files = ({ form, pkgFormats, setForm }: FilesProps) => {
   const [errors, setErrors] = useState<FilesError>({});
   const [touched, setTouched] = useState<FilesTouched>({});
 
-  function handleFileChange(index: number, field: keyof PluginFile, value: unknown) {
+  function handleFileChange(index: number, field: keyof PackageFile, value: unknown) {
     const updatedFiles = form.files.map((file, i) => (i === index ? { ...file, [field]: value } : file));
     handleFileValidate(index, updatedFiles[index]);
     updateForm('files', updatedFiles);
   }
 
-  function handleFileValidate(index: number, data: PluginFile) {
+  function handleFileValidate(index: number, data: PackageFile) {
     const result = PackageFileValidator.safeParse(data);
     if (!result.success) {
       const fieldErrors: FilesError = { files: [] };
       if (!fieldErrors.files![index]) fieldErrors.files![index] = {};
       result.error.errors.forEach(e => {
-        if (e.path[0]) fieldErrors.files![index][e.path[0] as keyof PluginFile] = e.message;
+        if (e.path[0]) fieldErrors.files![index][e.path[0] as keyof PackageFile] = e.message;
       });
       setErrors(fieldErrors);
     } else {
@@ -100,7 +103,7 @@ const Files = ({ form, setForm }: FilesProps) => {
     }
   }
 
-  function updateForm(field: keyof PluginInterface, value: PluginFile[]) {
+  function updateForm(field: keyof PackageVersion, value: PackageFile[]) {
     setForm(f => (f ? { ...f, [field]: value } : f));
     setTouched(t => ({ ...t, [field]: true }));
   }
@@ -186,9 +189,11 @@ const Files = ({ form, setForm }: FilesProps) => {
           <div className={styles.formGroup}>
             <Autocomplete
               multiple
-              options={pluginFormats}
+              options={pkgFormats}
               getOptionLabel={option => option.name}
-              value={file.contains.map(f => pluginFormats.find(fmt => fmt.value === f) || { value: f, name: f })}
+              value={file.contains.map(
+                f => pkgFormats.find(pkgFormat => pkgFormat.value === f) || { value: f, name: f },
+              )}
               onChange={(_, value) =>
                 handleFileChange(
                   index,
