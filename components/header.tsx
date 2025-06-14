@@ -1,7 +1,8 @@
 import Link from 'next/link';
 import styles from '../styles/components/header.module.css';
 import Image from 'next/image';
-import { getBasePath, isSelected } from '../lib/path';
+import { isSelected } from '../lib/path';
+import logo from '../public/images/open-audio-stack-logo.svg';
 
 type HeaderProps = {
   pathname: string;
@@ -10,13 +11,7 @@ type HeaderProps = {
 const Header = ({ pathname }: HeaderProps) => (
   <header className={styles.header}>
     <Link className={styles.logoLink} href="/">
-      <Image
-        className={styles.logo}
-        src={`${getBasePath()}/images/open-audio-stack-logo.svg`}
-        width={194}
-        height={34}
-        alt="Open Audio Stack logo"
-      />
+      <Image className={styles.logo} src={logo} width={194} height={34} alt="Open Audio Stack logo" />
     </Link>
     <nav className={styles.nav}>
       <ul>

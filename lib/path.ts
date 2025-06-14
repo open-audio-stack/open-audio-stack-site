@@ -1,7 +1,3 @@
-export function getBasePath() {
-  return process.env.CI ? '/open-audio-stack-site' : '';
-}
-
 // export function getCrumbUrl(items: string[], itemToMatch: string) {
 //   let url: string = '';
 //   for (const item of items) {
