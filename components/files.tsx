@@ -79,11 +79,57 @@ function handleRemoveFile(
   });
 }
 
+// TODO: Clean this code up and move to core package
+const GITHUB_RELEASE_REGEX = /^https:\/\/github\.com\/([^/]+)\/([^/]+)\/releases\/download\/([^/]+)\/(.+)$/;
+
+interface GitHubAsset {
+  browser_download_url: string;
+  digest?: string;
+  size: number;
+}
+
+async function fetchGithubReleaseAssetInfo(url: string) {
+  const match = url.match(GITHUB_RELEASE_REGEX);
+  if (!match) return null;
+  const [, owner, repo, tag] = match;
+  const apiUrl = `https://api.github.com/repos/${owner}/${repo}/releases/tags/${tag}`;
+  const resp = await fetch(apiUrl);
+  if (!resp.ok) return null;
+  const data = await resp.json();
+  if (!Array.isArray(data.assets)) return null;
+  const asset: GitHubAsset = data.assets.find((a: GitHubAsset) => a.browser_download_url === url);
+  if (!asset) return null;
+  return {
+    size: asset.size,
+    sha256: asset.digest ? asset.digest.replace('sha256:', '') : '',
+  };
+}
+
 const Files = ({ form, pkgFormats, setForm }: FilesProps) => {
   const [errors, setErrors] = useState<FilesError>({});
   const [touched, setTouched] = useState<FilesTouched>({});
 
-  function handleFileChange(index: number, field: keyof PackageFile, value: unknown) {
+  async function handleFileChange(index: number, field: keyof PackageFile, value: unknown) {
+    // If the url field is being changed and matches a GitHub release, fetch asset info
+    if (field === 'url' && typeof value === 'string' && GITHUB_RELEASE_REGEX.test(value)) {
+      const info = await fetchGithubReleaseAssetInfo(value);
+      if (info && (info.size || info.sha256)) {
+        const updatedFiles = form.files.map((file, i) =>
+          i === index
+            ? {
+                ...file,
+                url: value,
+                size: info.size || file.size,
+                sha256: info.sha256 || file.sha256,
+              }
+            : file,
+        );
+        handleFileValidate(index, updatedFiles[index]);
+        updateForm('files', updatedFiles);
+        return;
+      }
+    }
+    // Default behavior for all other changes
     const updatedFiles = form.files.map((file, i) => (i === index ? { ...file, [field]: value } : file));
     handleFileValidate(index, updatedFiles[index]);
     updateForm('files', updatedFiles);
