@@ -10,6 +10,7 @@ type EditorProps = {
   form: PackageVersion;
   pkgType: RegistryType;
   setForm: Dispatch<SetStateAction<PackageVersion | null>>;
+  version: string | undefined;
 };
 
 interface EditorError {
@@ -18,8 +19,6 @@ interface EditorError {
   name: string;
   reason: string;
 }
-
-const VERSION: string = '1.3.1';
 
 const handleCopy = (form: PackageVersion) => {
   navigator.clipboard.writeText(packageJsToYaml(form));
@@ -37,8 +36,8 @@ const handleDownload = (form: PackageVersion) => {
   URL.revokeObjectURL(url);
 };
 
-const handleSubmitViaGitHub = (pkgType: RegistryType, form: PackageVersion) => {
-  const title = encodeURIComponent(`${pkgType}: ${form.name} (v${VERSION})`);
+const handleSubmitViaGitHub = (pkgType: RegistryType, form: PackageVersion, version: string | undefined) => {
+  const title = encodeURIComponent(`${pkgType}: ${form.name} (v${version})`);
   const body = encodeURIComponent('```yaml\n' + packageJsToYaml(form) + '\n```');
   window.open(
     `https://github.com/open-audio-stack/open-audio-stack-registry/issues/new?title=${title}&labels=submission&body=${body}`,
@@ -63,7 +62,7 @@ const parseYamlToForm = (
   }
 };
 
-const Editor = ({ form, pkgType, setForm }: EditorProps) => {
+const Editor = ({ form, pkgType, setForm, version }: EditorProps) => {
   const [yamlError, setYamlError] = useState<string | null>(null);
   const [yamlValue, setYamlValue] = useState(packageJsToYaml(form));
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
@@ -109,7 +108,7 @@ const Editor = ({ form, pkgType, setForm }: EditorProps) => {
         <Button variant="outlined" onClick={() => handleDownload(form)}>
           Download
         </Button>
-        <Button variant="contained" color="inherit" onClick={() => handleSubmitViaGitHub(pkgType, form)}>
+        <Button variant="contained" color="inherit" onClick={() => handleSubmitViaGitHub(pkgType, form, version)}>
           Submit via GitHub
         </Button>
       </div>

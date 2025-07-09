@@ -25,12 +25,11 @@ type DetailsProps = {
   form: PackageVersion;
   pkgTypes: PluginTypeOption[] | PresetTypeOption[] | ProjectTypeOption[];
   setForm: Dispatch<SetStateAction<PackageVersion | null>>;
+  version: string | undefined;
+  setVersion: Dispatch<SetStateAction<string | undefined>>;
 };
 
-/* eslint-disable  prefer-const */
-let VERSION: string = '1.3.1';
-
-const Details = ({ form, pkgTypes, setForm }: DetailsProps) => {
+const Details = ({ form, pkgTypes, setForm, version, setVersion }: DetailsProps) => {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
 
@@ -91,6 +90,10 @@ const Details = ({ form, pkgTypes, setForm }: DetailsProps) => {
 
   function handleDateChange(e: React.ChangeEvent<HTMLInputElement>) {
     handleChange('date', e.target.value + ':00.000Z');
+  }
+
+  function handleVersionChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setVersion(e.target.value);
   }
 
   return (
@@ -196,7 +199,8 @@ const Details = ({ form, pkgTypes, setForm }: DetailsProps) => {
           label="Version"
           variant="filled"
           fullWidth
-          value={VERSION}
+          value={version}
+          onChange={handleVersionChange}
           InputProps={{
             startAdornment: <InputAdornment position="start">v</InputAdornment>,
           }}

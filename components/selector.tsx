@@ -7,6 +7,7 @@ type SelectorProps = {
   setForm: Dispatch<SetStateAction<PackageVersion | null>>;
   selectedPkg: string;
   setSelectedPkg: Dispatch<SetStateAction<string>>;
+  setVersion: Dispatch<SetStateAction<string | undefined>>;
   url: string;
 };
 
@@ -23,7 +24,7 @@ const fetchPkgData = async (url: string, selectedPkg: string): Promise<PackageVe
   return res.json();
 };
 
-const Selector = ({ setForm, selectedPkg, setSelectedPkg, url }: SelectorProps) => {
+const Selector = ({ setForm, selectedPkg, setSelectedPkg, setVersion, url }: SelectorProps) => {
   const [pkgList, setPkgList] = useState<string[]>([]);
   const [pkgLoading, setPkgLoading] = useState(false);
 
@@ -44,6 +45,7 @@ const Selector = ({ setForm, selectedPkg, setSelectedPkg, url }: SelectorProps) 
 
   const handleChange = (event: SelectChangeEvent) => {
     setSelectedPkg(event.target.value as string);
+    setVersion(event.target.value.split('/').pop());
   };
 
   const renderMenuItem = (id: string) => (

@@ -20,6 +20,7 @@ export default function Home() {
   const pathname = usePathname();
   const [form, setForm] = useState<PackageVersion | null>(null);
   const [selectedPkg, setSelectedPkg] = useState(PKG);
+  const [version, setVersion] = useState<string | undefined>(PKG.split('/').pop());
 
   useEffect(() => {
     fetch(`${ROOT_URL}/${PKG_TYPE}/${PKG}/`)
@@ -38,15 +39,16 @@ export default function Home() {
                 setForm={setForm}
                 selectedPkg={selectedPkg}
                 setSelectedPkg={setSelectedPkg}
+                setVersion={setVersion}
                 url={`${ROOT_URL}/${PKG_TYPE}`}
               />
-              <Details form={form} pkgTypes={PKG_TYPES} setForm={setForm} />
+              <Details form={form} pkgTypes={PKG_TYPES} setForm={setForm} version={version} setVersion={setVersion} />
             </div>
             <div className={styles.card}>
               <Files form={form} pkgFormats={PKG_FORMATS} setForm={setForm} />
             </div>
             <div className={`${styles.card} ${styles.metadata}`}>
-              <Editor form={form} pkgType={PKG_TYPE} setForm={setForm} />
+              <Editor form={form} pkgType={PKG_TYPE} setForm={setForm} version={version} />
             </div>
           </main>
         ) : (
