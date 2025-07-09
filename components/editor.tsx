@@ -41,7 +41,7 @@ const handleSubmitViaGitHub = (pkgType: RegistryType, form: PackageVersion) => {
   const title = encodeURIComponent(`${pkgType}: ${form.name} (v${VERSION})`);
   const body = encodeURIComponent('```yaml\n' + packageJsToYaml(form) + '\n```');
   window.open(
-    `https://github.com/open-audio-stack/open-audio-stack-registry/issues/new?title=${title}&body=${body}`,
+    `https://github.com/open-audio-stack/open-audio-stack-registry/issues/new?title=${title}&labels=submission&body=${body}`,
     '_blank',
   );
 };
