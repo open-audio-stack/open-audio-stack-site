@@ -20,6 +20,7 @@ import {
   PresetTypeOption,
 } from '@open-audio-stack/core';
 import { Dispatch, SetStateAction, useState, SyntheticEvent } from 'react';
+import { GuideType, withTooltip } from '../lib/tooltip';
 
 type DetailsProps = {
   form: PackageVersion;
@@ -73,7 +74,7 @@ const Details = ({ form, pkgTypes, setForm, version, setVersion }: DetailsProps)
       <TextField
         {...params}
         variant="filled"
-        label="Tags"
+        label={withTooltip(GuideType.Details, 'Tags', 'tags')}
         error={!!errors.tags && touched.tags}
         helperText={touched.tags && errors.tags}
       />
@@ -100,7 +101,7 @@ const Details = ({ form, pkgTypes, setForm, version, setVersion }: DetailsProps)
     <div className={styles.cardInner}>
       <div className={styles.formGroup}>
         <TextField
-          label="Name"
+          label={withTooltip(GuideType.Details, 'Name', 'name')}
           variant="filled"
           fullWidth
           value={form.name}
@@ -109,7 +110,7 @@ const Details = ({ form, pkgTypes, setForm, version, setVersion }: DetailsProps)
           helperText={touched.name && errors.name}
         />
         <TextField
-          label="Author"
+          label={withTooltip(GuideType.Details, 'Author', 'author')}
           variant="filled"
           fullWidth
           value={form.author}
@@ -119,7 +120,7 @@ const Details = ({ form, pkgTypes, setForm, version, setVersion }: DetailsProps)
         />
       </div>
       <TextField
-        label="Description"
+        label={withTooltip(GuideType.Details, 'Description', 'description')}
         variant="filled"
         multiline
         value={form.description}
@@ -129,8 +130,8 @@ const Details = ({ form, pkgTypes, setForm, version, setVersion }: DetailsProps)
       />
       <div className={styles.formGroup}>
         <FormControl variant="filled" fullWidth error={!!errors.type && touched.type}>
-          <InputLabel id="label-type">Type</InputLabel>
-          <Select label="Type" labelId="label-type" value={form.type} onChange={handleSelectChange('type')}>
+          <InputLabel id="label-type">{withTooltip(GuideType.Details, 'Type', 'type')}</InputLabel>
+          <Select labelId="label-type" value={form.type} onChange={handleSelectChange('type')}>
             {pkgTypes.map(pkgType => (
               <MenuItem value={pkgType.value} key={pkgType.value}>
                 {pkgType.name}
@@ -139,9 +140,8 @@ const Details = ({ form, pkgTypes, setForm, version, setVersion }: DetailsProps)
           </Select>
         </FormControl>
         <FormControl variant="filled" fullWidth error={!!errors.license && touched.license}>
-          <InputLabel id="label-license">License</InputLabel>
+          <InputLabel id="label-license">{withTooltip(GuideType.Details, 'License', 'license')}</InputLabel>
           <Select
-            label="License"
             variant="filled"
             labelId="label-license"
             value={form.license}
@@ -168,7 +168,7 @@ const Details = ({ form, pkgTypes, setForm, version, setVersion }: DetailsProps)
         />
       </div>
       <TextField
-        label="Homepage url"
+        label={withTooltip(GuideType.Details, 'Homepage url', 'url')}
         variant="filled"
         fullWidth
         value={form.url}
@@ -177,7 +177,7 @@ const Details = ({ form, pkgTypes, setForm, version, setVersion }: DetailsProps)
         helperText={touched.url && errors.url}
       />
       <TextField
-        label="Audio preview url"
+        label={withTooltip(GuideType.Details, 'Audio preview url', 'audio')}
         variant="filled"
         fullWidth
         value={form.audio}
@@ -186,7 +186,7 @@ const Details = ({ form, pkgTypes, setForm, version, setVersion }: DetailsProps)
         helperText={touched.audio && errors.audio}
       />
       <TextField
-        label="Image preview url"
+        label={withTooltip(GuideType.Details, 'Image preview url', 'image')}
         variant="filled"
         fullWidth
         value={form.image}
@@ -196,7 +196,7 @@ const Details = ({ form, pkgTypes, setForm, version, setVersion }: DetailsProps)
       />
       <div className={styles.formGroup}>
         <TextField
-          label="Version"
+          label={withTooltip(GuideType.Details, 'Version', 'version')}
           variant="filled"
           fullWidth
           value={version}
@@ -207,7 +207,7 @@ const Details = ({ form, pkgTypes, setForm, version, setVersion }: DetailsProps)
         />
         <TextField
           className={styles.input}
-          label="Release date"
+          label={withTooltip(GuideType.Details, 'Release date', 'date')}
           type="datetime-local"
           variant="filled"
           value={form.date.substring(0, 16)}
@@ -218,7 +218,7 @@ const Details = ({ form, pkgTypes, setForm, version, setVersion }: DetailsProps)
         />
       </div>
       <TextField
-        label="Change list"
+        label={withTooltip(GuideType.Details, 'Change list', 'changes')}
         variant="filled"
         fullWidth
         multiline

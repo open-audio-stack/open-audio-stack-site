@@ -13,6 +13,7 @@ import {
   PresetFormatOption,
   ProjectFormatOption,
 } from '@open-audio-stack/core';
+import { GuideType, withTooltip } from '@/lib/tooltip';
 
 type FilesProps = {
   form: PackageVersion;
@@ -163,9 +164,10 @@ const Files = ({ form, pkgFormats, setForm }: FilesProps) => {
         <div className={styles.file} key={index}>
           <div className={styles.formGroup}>
             <FormControl variant="filled" fullWidth>
-              <InputLabel id={`label-filetype-${index}`}>File type</InputLabel>
+              <InputLabel id={`label-filetype-${index}`}>
+                {withTooltip(GuideType.Files, 'File type', 'type')}
+              </InputLabel>
               <Select
-                label="File type"
                 variant="filled"
                 labelId={`label-filetype-${index}`}
                 value={file.type}
@@ -199,7 +201,7 @@ const Files = ({ form, pkgFormats, setForm }: FilesProps) => {
                 <TextField
                   {...params}
                   variant="filled"
-                  label="File systems"
+                  label={withTooltip(GuideType.Files, 'File systems', 'systems')}
                   error={!!(errors.files && errors.files[index]?.systems)}
                   helperText={errors.files && errors.files[index]?.systems}
                 />
@@ -224,7 +226,7 @@ const Files = ({ form, pkgFormats, setForm }: FilesProps) => {
                 <TextField
                   {...params}
                   variant="filled"
-                  label="File architectures"
+                  label={withTooltip(GuideType.Files, 'File architectures', 'architectures')}
                   error={!!(errors.files && errors.files[index]?.architectures)}
                   helperText={errors.files && errors.files[index]?.architectures}
                 />
@@ -251,7 +253,7 @@ const Files = ({ form, pkgFormats, setForm }: FilesProps) => {
                 <TextField
                   {...params}
                   variant="filled"
-                  label="File contains"
+                  label={withTooltip(GuideType.Files, 'File contains', 'contains')}
                   error={!!(errors.files && errors.files[index]?.contains)}
                   helperText={errors.files && errors.files[index]?.contains}
                 />
@@ -261,7 +263,7 @@ const Files = ({ form, pkgFormats, setForm }: FilesProps) => {
           </div>
           <div className={styles.formGroup}>
             <TextField
-              label="File url"
+              label={withTooltip(GuideType.Files, 'File url', 'url')}
               variant="filled"
               value={file.url}
               fullWidth
@@ -272,7 +274,7 @@ const Files = ({ form, pkgFormats, setForm }: FilesProps) => {
           </div>
           <div className={styles.formGroup}>
             <TextField
-              label="File size"
+              label={withTooltip(GuideType.Files, 'File size', 'size')}
               variant="filled"
               value={file.size}
               fullWidth
@@ -281,7 +283,7 @@ const Files = ({ form, pkgFormats, setForm }: FilesProps) => {
               helperText={errors.files && errors.files[index]?.size}
             />
             <TextField
-              label="File sha256"
+              label={withTooltip(GuideType.Files, 'File sha256', 'sha256')}
               variant="filled"
               value={file.sha256}
               fullWidth
