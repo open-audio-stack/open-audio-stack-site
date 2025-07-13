@@ -238,7 +238,7 @@ const Files = ({ form, pkgFormats, setForm }: FilesProps) => {
             <Autocomplete
               multiple
               options={pkgFormats}
-              getOptionLabel={option => option.name}
+              getOptionLabel={option => `${option.name} (.${option.value})`}
               value={file.contains.map(
                 f => pkgFormats.find(pkgFormat => pkgFormat.value === f) || { value: f, name: f },
               )}
