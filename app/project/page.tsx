@@ -2,13 +2,14 @@
 import styles from '../../styles/page.module.css';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { PackageVersion, projectFormats, projectTypes, RegistryType } from '@open-audio-stack/core';
+import { PackageVersion, projectFormats, ProjectInterface, projectTypes, RegistryType } from '@open-audio-stack/core';
 
 import Header from '../../components/header';
 import Selector from '../../components/selector';
 import Details from '../../components/details';
 import Files from '../../components/files';
 import Editor from '../../components/editor';
+import MultiSelect from '@/components/multiselect';
 
 const ROOT_URL = `https://open-audio-stack.github.io/open-audio-stack-registry`;
 const PKG: string = 'kmt/banwer/1.0.1';
@@ -43,6 +44,11 @@ export default function Home() {
                 url={`${ROOT_URL}/${PKG_TYPE}`}
               />
               <Details form={form} pkgTypes={PKG_TYPES} setForm={setForm} version={version} setVersion={setVersion} />
+              <MultiSelect
+                value={(form as ProjectInterface).plugins || {}}
+                onChange={plugins => setForm(f => (f ? { ...f, plugins } : f))}
+                url={`${ROOT_URL}/plugins`}
+              />
             </div>
             <div className={styles.card}>
               <Files form={form} pkgFormats={PKG_FORMATS} setForm={setForm} />

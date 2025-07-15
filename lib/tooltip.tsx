@@ -21,6 +21,7 @@ const details: Record<string, string> = {
   date: 'Package release datetime in Unix timestamp format in UTC timezone',
   changes: 'Package changes made since previous version',
   version: 'Package version number in the Semantic Version format',
+  plugins: 'Select one or more plugins which have to be installed for this to load',
 };
 
 const files: Record<string, string> = {
