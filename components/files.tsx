@@ -102,7 +102,7 @@ async function fetchGithubReleaseAssetInfo(url: string) {
   if (!asset) return null;
   return {
     size: asset.size,
-    sha256: asset.digest ? asset.digest.replace('sha256:', '') : '',
+    sha256: asset.digest ? asset.digest.replace('sha256:', '') : null,
   };
 }
 
