@@ -1,4 +1,4 @@
-import { GuideType, withTooltip } from '@/lib/tooltip';
+import { GuideType, withTooltip } from '../components/tooltip';
 import { Autocomplete, TextField, Chip } from '@mui/material';
 import { PackageInterface, PresetPlugins, RegistryPackages } from '@open-audio-stack/core';
 import { useEffect, useState } from 'react';

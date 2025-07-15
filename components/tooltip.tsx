@@ -27,9 +27,10 @@ const details: Record<string, string> = {
 const files: Record<string, string> = {
   architectures: 'CPU architectures supported by this file',
   contains: 'Formats contained in this file',
-  sha256: 'File checksum for security validation that the published file matches the downloaded file',
+  sha256:
+    'File checksum for security validation that the published file matches the downloaded file. Use the command line `sha256sum <filename>` on Linux `shasum -a 256 <filename>` on MacOS or `CertUtil -hashfile <filename> SHA256` on Windows.',
   systems: 'Operating systems supported by this file',
-  size: 'File size in bytes',
+  size: 'File size in bytes. Use the command line `stat <filename>` to get the size of a file on your computer.',
   type: 'File type (archive or installer)',
   url: 'Direct download url (https) for this file. We recommend hosting files on GitHub',
 };

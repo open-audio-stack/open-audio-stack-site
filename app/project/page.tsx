@@ -9,7 +9,7 @@ import Selector from '../../components/selector';
 import Details from '../../components/details';
 import Files from '../../components/files';
 import Editor from '../../components/editor';
-import MultiSelect from '@/components/multiselect';
+import MultiSelect from '../../components/multiselect';
 
 const ROOT_URL = `https://open-audio-stack.github.io/open-audio-stack-registry`;
 const PKG: string = 'kmt/banwer/1.0.1';

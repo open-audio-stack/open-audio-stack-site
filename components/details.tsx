@@ -20,7 +20,7 @@ import {
   PresetTypeOption,
 } from '@open-audio-stack/core';
 import { Dispatch, SetStateAction, useState, SyntheticEvent } from 'react';
-import { GuideType, withTooltip } from '../lib/tooltip';
+import { GuideType, withTooltip } from './tooltip';
 
 type DetailsProps = {
   form: PackageVersion;

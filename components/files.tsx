@@ -13,7 +13,7 @@ import {
   PresetFormatOption,
   ProjectFormatOption,
 } from '@open-audio-stack/core';
-import { GuideType, withTooltip } from '@/lib/tooltip';
+import { GuideType, withTooltip } from '../components/tooltip';
 
 type FilesProps = {
   form: PackageVersion;
