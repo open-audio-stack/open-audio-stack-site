@@ -18,7 +18,7 @@ const details: Record<string, string> = {
     'Audio preview url (https). Allows users to preview the sound of the package before downloading. We recommend hosting files on GitHub',
   image:
     'Image preview url (https). Allows users to preview the user interface of the package before downloading. We recommend hosting files on GitHub',
-  date: 'Package release datetime in Unix timestamp format in UTC timezone',
+  date: 'Package release datetime, the date when the builds were created, uploaded and "released" (in Unix timestamp format and UTC timezone)',
   changes: 'Package changes made since previous version',
   version: 'Package version number in the Semantic Version format',
   plugins: 'Select one or more plugins which have to be installed for this to load',
