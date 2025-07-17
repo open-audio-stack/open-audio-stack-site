@@ -27,8 +27,14 @@ const details: Record<string, string> = {
 const files: Record<string, string> = {
   architectures: 'CPU architectures supported by this file',
   contains: 'Formats contained in this file',
-  sha256:
-    'File checksum for security validation that the published file matches the downloaded file. Use the command line `sha256sum <filename>` on Linux `shasum -a 256 <filename>` on MacOS or `CertUtil -hashfile <filename> SHA256` on Windows.',
+  sha256: `File checksum for security validation ensures the published file matches the downloaded file.
+
+    If File url above points to a GitHub Release uploaded after June 3, 2025, this will be autopopulated for you.
+
+    Otherwise you will need to manually populate using a command line tool:
+    - Linux "sha256sum <filename>"
+    - MacOS "shasum -a 256 <filename>"
+    - Windows "CertUtil -hashfile <filename> SHA256"`,
   systems: 'Operating systems supported by this file',
   size: 'File size in bytes. Use the command line `stat <filename>` to get the size of a file on your computer.',
   type: 'File type (archive or installer)',
@@ -41,10 +47,11 @@ const guides = {
 };
 
 export function withTooltip(type: GuideType, label: string, field: string) {
+  const content = guides[type][field] || '';
   return (
     <span>
       {label}
-      <Tooltip title={guides[type][field] || ''} placement="top" arrow>
+      <Tooltip title={<span style={{ whiteSpace: 'pre-line' }}>{content}</span>} placement="top" arrow>
         <InfoOutlinedIcon fontSize="small" sx={{ verticalAlign: 'middle', ml: 0.5, cursor: 'pointer' }} />
       </Tooltip>
     </span>
