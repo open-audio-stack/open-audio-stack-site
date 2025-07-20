@@ -52,6 +52,9 @@ export default function Home() {
             </div>
             <div className={styles.card}>
               <Files form={form} pkgFormats={PKG_FORMATS} setForm={setForm} />
+              <p className={styles.message}>
+                When saving a project for distribution, ensure you export all files and samples along with the project.
+              </p>
             </div>
             <div className={`${styles.card} ${styles.metadata}`}>
               <Editor form={form} pkgType={PKG_TYPE} setForm={setForm} version={version} />

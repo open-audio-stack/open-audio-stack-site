@@ -10,6 +10,17 @@
   background-color: #f8f8f8;
 }
 
+.message {
+  font-size: 0.875rem;
+  color: #555;
+  margin-top: 1rem;
+}
+
+.message a {
+  color: #1976d2;
+  text-decoration: none;
+}
+
 @media (min-width: 64rem) {
   .mainColumns {
     display: flex;
