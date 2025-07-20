@@ -39,6 +39,17 @@ href="https://open-audio-stack.github.io/open-audio-stack-registry">here</a>
           <p className={styles.message}>
   Our Github is <a href="https://github.com/open-audio-stack">here</a>
           </p>
+          <p className={styles.message}>
+          If you wish to make Open Audio Stack an official location for your users to upload presets for your plugin, please apply the following badge to your project.
+          <br/><br/>
+          <a href="https://github.com/open-audio-stack" target="_blank"><img src="https://raw.githubusercontent.com/open-audio-stack/open-audio-stack-registry/refs/heads/main/src/assets/powered-by-open-audio-stack.svg" alt="Powered by Open Audio Stack"></a>
+          <br/>
+          <p className={styles.message}>
+          Copy and paste the below text to render the badge:
+          </p>
+          <code>&lt;a href=&quot;https://github.com/open-audio-stack&quot; target=&quot;_blank&quot;&gt;&lt;img 
+src=&quot;https://raw.githubusercontent.com/open-audio-stack/open-audio-stack-registry/refs/heads/main/src/assets/powered-by-open-audio-stack.svg&quot; alt=&quot;Powered by Open Audio Stack&quot;&gt;&lt;/a&gt;</code>
+          </p>
         </main>
       </section>
     </div>
