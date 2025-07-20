@@ -19,6 +19,11 @@ export default function Home() {
 also 
   samples and MIDI.
           </p>
+           <p className={styles.message}>
+Uploading a plugin, preset, or project is easy! Simply fill out the metadata and press "Submit via Github". You need a Github account to do this. The file URL should point to somewhere the file can be accessed to on the internet,
+             such as Github. If you do not have anywhere to host it, simply attach the file in your issue request after you submit it and we will do it for you. If you do not have a Github account, you can also copy and paste the form and
+             send it to us on our <a href="https://discord.com/invite/9D94f98PxP">Discord</a>.
+          </p>
           <p className={styles.message}>
   Platforms that have currently integrated OAS as of July 2025:
   <br/>
