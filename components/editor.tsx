@@ -1,6 +1,6 @@
 import AceEditor from 'react-ace';
 import 'ace-builds/src-noconflict/mode-yaml';
-import 'ace-builds/src-noconflict/theme-monokai';
+import 'ace-builds/src-noconflict/theme-tomorrow_night_bright';
 import { packageJsToYaml, packageYamlToJs, PackageVersion, RegistryType } from '@open-audio-stack/core';
 import { Dispatch, SetStateAction, useEffect, useState, useRef } from 'react';
 import { Button } from '@mui/material';
@@ -86,7 +86,7 @@ const Editor = ({ form, pkgType, setForm, version }: EditorProps) => {
       <AceEditor
         className={styles.ace}
         mode="yaml"
-        theme="monokai"
+        theme="tomorrow_night_bright"
         name="metadata-yaml-editor"
         value={yamlValue ?? ''}
         onChange={handleEditorChange}
