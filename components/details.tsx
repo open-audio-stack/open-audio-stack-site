@@ -25,7 +25,7 @@ import { GuideType, withTooltip } from './tooltip';
 type DetailsProps = {
   form: PackageVersion;
   pkgTypes: PluginTypeOption[] | PresetTypeOption[] | ProjectTypeOption[];
-  setForm: Dispatch<SetStateAction<PackageVersion | null>>;
+  setForm: Dispatch<SetStateAction<PackageVersion>>;
   version: string | undefined;
   setVersion: Dispatch<SetStateAction<string | undefined>>;
 };
@@ -104,7 +104,7 @@ const Details = ({ form, pkgTypes, setForm, version, setVersion }: DetailsProps)
           label={withTooltip(GuideType.Details, 'Name', 'name')}
           variant="filled"
           fullWidth
-          value={form.name}
+          value={form.name ?? ''}
           onChange={handleInputChange('name')}
           error={!!errors.name && touched.name}
           helperText={touched.name && errors.name}
@@ -113,7 +113,7 @@ const Details = ({ form, pkgTypes, setForm, version, setVersion }: DetailsProps)
           label={withTooltip(GuideType.Details, 'Author', 'author')}
           variant="filled"
           fullWidth
-          value={form.author}
+          value={form.author ?? ''}
           onChange={handleInputChange('author')}
           error={!!errors.author && touched.author}
           helperText={touched.author && errors.author}
@@ -123,7 +123,7 @@ const Details = ({ form, pkgTypes, setForm, version, setVersion }: DetailsProps)
         label={withTooltip(GuideType.Details, 'Description', 'description')}
         variant="filled"
         multiline
-        value={form.description}
+        value={form.description ?? ''}
         onChange={handleInputChange('description')}
         error={!!errors.description && touched.description}
         helperText={touched.description && errors.description}
@@ -131,9 +131,9 @@ const Details = ({ form, pkgTypes, setForm, version, setVersion }: DetailsProps)
       <div className={styles.formGroup}>
         <FormControl variant="filled" fullWidth error={!!errors.type && touched.type}>
           <InputLabel id="label-type">{withTooltip(GuideType.Details, 'Type', 'type')}</InputLabel>
-          <Select labelId="label-type" value={form.type} onChange={handleSelectChange('type')}>
+          <Select labelId="label-type" value={form.type ?? ''} onChange={handleSelectChange('type')}>
             {pkgTypes.map(pkgType => (
-              <MenuItem value={pkgType.value} key={pkgType.value}>
+              <MenuItem value={pkgType.value ?? ''} key={pkgType.value}>
                 {pkgType.name}
               </MenuItem>
             ))}
@@ -144,11 +144,11 @@ const Details = ({ form, pkgTypes, setForm, version, setVersion }: DetailsProps)
           <Select
             variant="filled"
             labelId="label-license"
-            value={form.license}
+            value={form.license ?? ''}
             onChange={handleSelectChange('license')}
           >
             {licenses.map(license => (
-              <MenuItem value={license.value} key={license.value}>
+              <MenuItem value={license.value ?? ''} key={license.value}>
                 {license.name}
               </MenuItem>
             ))}
@@ -159,7 +159,7 @@ const Details = ({ form, pkgTypes, setForm, version, setVersion }: DetailsProps)
         <Autocomplete
           options={[]}
           freeSolo
-          value={form.tags}
+          value={form.tags ?? ''}
           onChange={handleTagsChange}
           renderTags={renderTags}
           renderInput={renderTagsInput}
@@ -171,7 +171,7 @@ const Details = ({ form, pkgTypes, setForm, version, setVersion }: DetailsProps)
         label={withTooltip(GuideType.Details, 'Homepage url', 'url')}
         variant="filled"
         fullWidth
-        value={form.url}
+        value={form.url ?? ''}
         onChange={handleInputChange('url')}
         error={!!errors.url && touched.url}
         helperText={touched.url && errors.url}
@@ -180,7 +180,7 @@ const Details = ({ form, pkgTypes, setForm, version, setVersion }: DetailsProps)
         label={withTooltip(GuideType.Details, 'Audio preview url', 'audio')}
         variant="filled"
         fullWidth
-        value={form.audio}
+        value={form.audio ?? ''}
         onChange={handleInputChange('audio')}
         error={!!errors.audio && touched.audio}
         helperText={touched.audio && errors.audio}
@@ -189,7 +189,7 @@ const Details = ({ form, pkgTypes, setForm, version, setVersion }: DetailsProps)
         label={withTooltip(GuideType.Details, 'Image preview url', 'image')}
         variant="filled"
         fullWidth
-        value={form.image}
+        value={form.image ?? ''}
         onChange={handleInputChange('image')}
         error={!!errors.image && touched.image}
         helperText={touched.image && errors.image}
@@ -199,7 +199,7 @@ const Details = ({ form, pkgTypes, setForm, version, setVersion }: DetailsProps)
           label={withTooltip(GuideType.Details, 'Version', 'version')}
           variant="filled"
           fullWidth
-          value={version}
+          value={version ?? ''}
           onChange={handleVersionChange}
           InputProps={{
             startAdornment: <InputAdornment position="start">v</InputAdornment>,
@@ -210,7 +210,7 @@ const Details = ({ form, pkgTypes, setForm, version, setVersion }: DetailsProps)
           label={withTooltip(GuideType.Details, 'Release date', 'date')}
           type="datetime-local"
           variant="filled"
-          value={form.date.substring(0, 16)}
+          value={form.date.substring(0, 16) ?? ''}
           onChange={handleDateChange}
           error={!!errors.date && touched.date}
           helperText={touched.date && errors.date}
@@ -222,7 +222,7 @@ const Details = ({ form, pkgTypes, setForm, version, setVersion }: DetailsProps)
         variant="filled"
         fullWidth
         multiline
-        value={form.changes}
+        value={form.changes ?? ''}
         onChange={handleInputChange('changes')}
         error={!!errors.changes && touched.changes}
         helperText={touched.changes && errors.changes}

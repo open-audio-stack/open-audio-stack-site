@@ -18,7 +18,7 @@ import { GuideType, withTooltip } from '../components/tooltip';
 type FilesProps = {
   form: PackageVersion;
   pkgFormats: PluginFormatOption[] | PresetFormatOption[] | ProjectFormatOption[];
-  setForm: Dispatch<SetStateAction<PackageVersion | null>>;
+  setForm: Dispatch<SetStateAction<PackageVersion>>;
 };
 
 type FilesError = {
@@ -170,11 +170,11 @@ const Files = ({ form, pkgFormats, setForm }: FilesProps) => {
               <Select
                 variant="filled"
                 labelId={`label-filetype-${index}`}
-                value={file.type}
+                value={file.type ?? ''}
                 onChange={e => handleFileChange(index, 'type', e.target.value)}
               >
                 {fileTypes.map(fileType => (
-                  <MenuItem value={fileType.value} key={fileType.value}>
+                  <MenuItem value={fileType.value ?? ''} key={fileType.value}>
                     {fileType.name}
                   </MenuItem>
                 ))}
@@ -187,9 +187,11 @@ const Files = ({ form, pkgFormats, setForm }: FilesProps) => {
               multiple
               options={systemTypes}
               getOptionLabel={option => option.name}
-              value={file.systems.map(
-                s => systemTypes.find(sys => sys.value === s.type) || { value: s.type, name: s.type },
-              )}
+              value={
+                file.systems.map(
+                  s => systemTypes.find(sys => sys.value === s.type) || { value: s.type, name: s.type },
+                ) ?? ''
+              }
               onChange={(_, value) =>
                 handleFileChange(
                   index,
@@ -214,7 +216,9 @@ const Files = ({ form, pkgFormats, setForm }: FilesProps) => {
               multiple
               options={architectures}
               getOptionLabel={option => option.name}
-              value={file.architectures.map(a => architectures.find(arch => arch.value === a) || { value: a, name: a })}
+              value={
+                file.architectures.map(a => architectures.find(arch => arch.value === a) || { value: a, name: a }) ?? ''
+              }
               onChange={(_, value) =>
                 handleFileChange(
                   index,
@@ -239,9 +243,10 @@ const Files = ({ form, pkgFormats, setForm }: FilesProps) => {
               multiple
               options={pkgFormats}
               getOptionLabel={option => `${option.name} (.${option.value})`}
-              value={file.contains.map(
-                f => pkgFormats.find(pkgFormat => pkgFormat.value === f) || { value: f, name: f },
-              )}
+              value={
+                file.contains.map(f => pkgFormats.find(pkgFormat => pkgFormat.value === f) || { value: f, name: f }) ??
+                ''
+              }
               onChange={(_, value) =>
                 handleFileChange(
                   index,
@@ -265,7 +270,7 @@ const Files = ({ form, pkgFormats, setForm }: FilesProps) => {
             <TextField
               label={withTooltip(GuideType.Files, 'File url', 'url')}
               variant="filled"
-              value={file.url}
+              value={file.url ?? ''}
               fullWidth
               onChange={e => handleFileChange(index, 'url', e.target.value)}
               error={!!(errors.files && errors.files[index]?.url)}
@@ -276,7 +281,7 @@ const Files = ({ form, pkgFormats, setForm }: FilesProps) => {
             <TextField
               label={withTooltip(GuideType.Files, 'File size', 'size')}
               variant="filled"
-              value={file.size}
+              value={file.size ?? ''}
               fullWidth
               onChange={e => handleFileChange(index, 'size', Number(e.target.value))}
               error={!!(errors.files && errors.files[index]?.size)}
@@ -285,7 +290,7 @@ const Files = ({ form, pkgFormats, setForm }: FilesProps) => {
             <TextField
               label={withTooltip(GuideType.Files, 'File sha256', 'sha256')}
               variant="filled"
-              value={file.sha256}
+              value={file.sha256 ?? ''}
               fullWidth
               onChange={e => handleFileChange(index, 'sha256', e.target.value)}
               error={!!(errors.files && errors.files[index]?.sha256)}

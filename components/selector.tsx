@@ -1,14 +1,16 @@
 import { CircularProgress, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import { PackageVersion, RegistryPackages } from '@open-audio-stack/core';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from '../styles/components/selector.module.css';
 
 type SelectorProps = {
-  setForm: Dispatch<SetStateAction<PackageVersion | null>>;
+  setForm: (form: PackageVersion) => void;
   selectedPkg: string;
-  setSelectedPkg: Dispatch<SetStateAction<string>>;
-  setVersion: Dispatch<SetStateAction<string | undefined>>;
+  setSelectedPkg: (pkg: string) => void;
+  setVersion: (version: string | undefined) => void;
   url: string;
+  includeBlankTemplate?: boolean;
+  blankLabel?: string;
 };
 
 const fetchPkgList = async (url: string): Promise<string[]> => {
@@ -49,7 +51,7 @@ const Selector = ({ setForm, selectedPkg, setSelectedPkg, setVersion, url }: Sel
   };
 
   const renderMenuItem = (id: string) => (
-    <MenuItem value={id} key={id}>
+    <MenuItem value={id ?? ''} key={id}>
       {id}
     </MenuItem>
   );
@@ -57,14 +59,14 @@ const Selector = ({ setForm, selectedPkg, setSelectedPkg, setVersion, url }: Sel
   return (
     <div className={styles.selector}>
       <h4>Details</h4>
-      <FormControl variant="filled" size="small">
+      <FormControl variant="filled" size="small" className={styles.control}>
         <InputLabel id="select-label" className="label-dark">
-          Load package
+          Load template
         </InputLabel>
         <Select
           className="select-dark"
           labelId="select-label"
-          value={selectedPkg}
+          value={selectedPkg ?? ''}
           onChange={handleChange}
           disabled={pkgLoading || pkgList.length === 0}
         >

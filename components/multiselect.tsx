@@ -46,7 +46,7 @@ export default function MultiSelect({ value, onChange, url }: MultiSelectProps) 
       multiple
       options={options}
       getOptionLabel={option => option.label}
-      value={selectedOptions}
+      value={selectedOptions ?? ''}
       onChange={handleChange}
       renderTags={(value, getTagProps) =>
         value.map((option, index) => (

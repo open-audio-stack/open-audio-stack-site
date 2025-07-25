@@ -9,7 +9,7 @@ import styles from '../styles/components/editor.module.css';
 type EditorProps = {
   form: PackageVersion;
   pkgType: RegistryType;
-  setForm: Dispatch<SetStateAction<PackageVersion | null>>;
+  setForm: Dispatch<SetStateAction<PackageVersion>>;
   version: string | undefined;
 };
 
@@ -47,7 +47,7 @@ const handleSubmitViaGitHub = (pkgType: RegistryType, form: PackageVersion, vers
 
 const parseYamlToForm = (
   val: string,
-  setForm: Dispatch<SetStateAction<PackageVersion | null>>,
+  setForm: Dispatch<SetStateAction<PackageVersion>>,
   setYamlError: (e: string | null) => void,
 ) => {
   try {
@@ -88,7 +88,7 @@ const Editor = ({ form, pkgType, setForm, version }: EditorProps) => {
         mode="yaml"
         theme="monokai"
         name="metadata-yaml-editor"
-        value={yamlValue}
+        value={yamlValue ?? ''}
         onChange={handleEditorChange}
         width="100%"
         height="580px"
