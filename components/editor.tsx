@@ -97,8 +97,8 @@ const Editor = ({ form, pkgType, setForm, version }: EditorProps) => {
           useWorker: false,
           showLineNumbers: true,
           tabSize: 2,
+          enableKeyboardAccessibility: true,
         }}
-        editorProps={{ $blockScrolling: true }}
       />
       {yamlError && <div className={styles.error}>YAML Error: {yamlError}</div>}
       <div className={styles.buttons}>

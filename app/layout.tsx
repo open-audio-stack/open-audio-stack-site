@@ -24,6 +24,9 @@ export default function RootLayout({
     <html lang="en" className={`${geistSans.variable}`}>
       <meta name="viewport" content="initial-scale=1, width=device-width" />
       <body>
+        <a href="#main-content" className="skipLink">
+          Skip to main content
+        </a>
         <AppRouterCacheProvider>
           <ThemeProvider theme={theme}>{children}</ThemeProvider>
         </AppRouterCacheProvider>

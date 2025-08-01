@@ -80,9 +80,12 @@ export default function Home() {
   return (
     <div className={styles.page}>
       <Header pathname={pathname} />
-      <section className={styles.section}>
-        <main className={styles.mainColumns}>
+      <main className={styles.section} id="main-content" tabIndex={-1}>
+        <section className={styles.mainColumns} aria-labelledby="form-title">
           <div className={styles.card}>
+            <h1 className={styles.hidden} id="form-title">
+              Add preset
+            </h1>
             <Selector
               setForm={setForm}
               selectedPkg={selectedPkg}
@@ -105,8 +108,8 @@ export default function Home() {
           <div className={`${styles.card} ${styles.metadata}`}>
             <Editor form={form} pkgType={PKG_TYPE} setForm={setForm} version={version} />
           </div>
-        </main>
-      </section>
+        </section>
+      </main>
     </div>
   );
 }
