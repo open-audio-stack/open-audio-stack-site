@@ -214,6 +214,7 @@ const Details = ({ form, pkgTypes, setForm, version, setVersion }: DetailsProps)
           onChange={handleDateChange}
           error={!!errors.date && touched.date}
           helperText={touched.date && errors.date}
+          InputLabelProps={{ shrink: true }}
           fullWidth
         />
       </div>
