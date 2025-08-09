@@ -29,6 +29,10 @@
   text-decoration: none;
 }
 
+.additionalField {
+  margin-bottom: 1rem;
+}
+
 @media (min-width: 64rem) {
   .mainColumns {
     display: flex;

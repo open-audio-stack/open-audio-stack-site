@@ -65,6 +65,8 @@ export default function Home() {
       fetch(`${ROOT_URL}/${PKG_TYPE}/${pkg}/`)
         .then(res => res.json())
         .then((data: PackageVersion) => {
+          // Remove calculated field.
+          delete data.verified;
           setForm(data);
           setVersion(pkg.split('/').pop());
         });
@@ -84,7 +86,6 @@ export default function Home() {
               Add plugin
             </h1>
             <Selector
-              setForm={setForm}
               selectedPkg={selectedPkg}
               setSelectedPkg={handleSelectPkg}
               setVersion={setVersion}

@@ -20,6 +20,8 @@ import Details from '../../components/details';
 import Files from '../../components/files';
 import Editor from '../../components/editor';
 import MultiSelect from '../../components/multiselect';
+import { TextField } from '@mui/material';
+import { GuideType, withTooltip } from '@/components/tooltip';
 
 const ROOT_URL = `https://open-audio-stack.github.io/open-audio-stack-registry`;
 const PKG_FORMATS = projectFormats;
@@ -69,6 +71,8 @@ export default function Home() {
       fetch(`${ROOT_URL}/${PKG_TYPE}/${pkg}/`)
         .then(res => res.json())
         .then((data: PackageVersion) => {
+          // Remove calculated field.
+          delete data.verified;
           setForm(data);
           setVersion(pkg.split('/').pop());
         });
@@ -88,7 +92,6 @@ export default function Home() {
               Add project
             </h1>
             <Selector
-              setForm={setForm}
               selectedPkg={selectedPkg}
               setSelectedPkg={handleSelectPkg}
               setVersion={setVersion}
@@ -97,11 +100,22 @@ export default function Home() {
               blankLabel="Select a template"
             />
             <Details form={form} pkgTypes={PKG_TYPES} setForm={setForm} version={version} setVersion={setVersion} />
-            <MultiSelect
-              value={(form as ProjectInterface).plugins || {}}
-              onChange={plugins => setForm(f => ({ ...f, plugins }))}
-              url={`${ROOT_URL}/plugins`}
-            />
+            <div className={styles.additionalField}>
+              <TextField
+                label={withTooltip(GuideType.Details, 'Project filename to open', 'open')}
+                variant="filled"
+                fullWidth
+                value={(form as ProjectInterface).open ?? ''}
+                onChange={e => setForm(f => ({ ...f, open: e.target.value }))}
+              />
+            </div>
+            <div className={styles.additionalField}>
+              <MultiSelect
+                value={(form as ProjectInterface).plugins || {}}
+                onChange={plugins => setForm(f => ({ ...f, plugins }))}
+                url={`${ROOT_URL}/plugins`}
+              />
+            </div>
           </div>
           <div className={styles.card}>
             <Files form={form} pkgFormats={PKG_FORMATS} setForm={setForm} />

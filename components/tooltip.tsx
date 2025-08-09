@@ -23,6 +23,7 @@ const details: Record<string, string> = {
   changes: 'Package changes made since previous version',
   version: 'Package version number in the Semantic Version format',
   plugins: 'Select one or more plugins which have to be installed for this to load',
+  open: 'Project entry point, first filename to open after installation',
 };
 
 const files: Record<string, string> = {

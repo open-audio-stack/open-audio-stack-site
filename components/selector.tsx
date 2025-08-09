@@ -1,10 +1,9 @@
 import { CircularProgress, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
-import { PackageVersion, RegistryPackages } from '@open-audio-stack/core';
+import { RegistryPackages } from '@open-audio-stack/core';
 import { useEffect, useState } from 'react';
 import styles from '../styles/components/selector.module.css';
 
 type SelectorProps = {
-  setForm: (form: PackageVersion) => void;
   selectedPkg: string;
   setSelectedPkg: (pkg: string) => void;
   setVersion: (version: string | undefined) => void;
@@ -21,12 +20,7 @@ const fetchPkgList = async (url: string): Promise<string[]> => {
   return ids;
 };
 
-const fetchPkgData = async (url: string, selectedPkg: string): Promise<PackageVersion> => {
-  const res = await fetch(`${url}/${selectedPkg}/`);
-  return res.json();
-};
-
-const Selector = ({ setForm, selectedPkg, setSelectedPkg, setVersion, url }: SelectorProps) => {
+const Selector = ({ selectedPkg, setSelectedPkg, setVersion, url }: SelectorProps) => {
   const [pkgList, setPkgList] = useState<string[]>([]);
   const [pkgLoading, setPkgLoading] = useState(false);
 
@@ -36,17 +30,6 @@ const Selector = ({ setForm, selectedPkg, setSelectedPkg, setVersion, url }: Sel
       .then(ids => setPkgList(ids))
       .finally(() => setPkgLoading(false));
   }, [url]);
-
-  useEffect(() => {
-    if (!selectedPkg) return;
-    setPkgLoading(true);
-    fetchPkgData(url, selectedPkg)
-      .then(data => {
-        if (data.verified) delete data.verified;
-        setForm(data);
-      })
-      .finally(() => setPkgLoading(false));
-  }, [url, selectedPkg, setForm]);
 
   const handleChange = (event: SelectChangeEvent) => {
     setSelectedPkg(event.target.value as string);
