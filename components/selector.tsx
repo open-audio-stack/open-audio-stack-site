@@ -41,7 +41,10 @@ const Selector = ({ setForm, selectedPkg, setSelectedPkg, setVersion, url }: Sel
     if (!selectedPkg) return;
     setPkgLoading(true);
     fetchPkgData(url, selectedPkg)
-      .then(data => setForm(data))
+      .then(data => {
+        if (data.verified) delete data.verified;
+        setForm(data);
+      })
       .finally(() => setPkgLoading(false));
   }, [url, selectedPkg, setForm]);
 
