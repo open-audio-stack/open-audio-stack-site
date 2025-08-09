@@ -194,6 +194,15 @@ const Details = ({ form, pkgTypes, setForm, version, setVersion }: DetailsProps)
         error={!!errors.image && touched.image}
         helperText={touched.image && errors.image}
       />
+      <TextField
+        label={withTooltip(GuideType.Details, 'Donate url', 'donate')}
+        variant="filled"
+        fullWidth
+        value={form.donate ?? ''}
+        onChange={handleInputChange('donate')}
+        error={!!errors.donate && touched.donate}
+        helperText={touched.donate && errors.donate}
+      />
       <div className={styles.formGroup}>
         <TextField
           label={withTooltip(GuideType.Details, 'Version', 'version')}

@@ -18,6 +18,7 @@ const details: Record<string, string> = {
     'Audio preview url (https). Allows users to preview the sound of the package before downloading. We recommend hosting files on GitHub',
   image:
     'Image preview url (https). Allows users to preview the user interface of the package before downloading. We recommend hosting files on GitHub',
+  donate: 'Optional url (https) to a donation page for this package',
   date: 'Package release datetime, the date when the builds were created, uploaded and "released" (in Unix timestamp format and UTC timezone)',
   changes: 'Package changes made since previous version',
   version: 'Package version number in the Semantic Version format',
