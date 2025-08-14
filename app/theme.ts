@@ -128,6 +128,14 @@ const theme = createTheme({
             color: '#fff',
           },
         },
+        outlined: {
+          borderColor: '#000',
+          color: '#000',
+          '&:hover': {
+            backgroundColor: '#f8f8f8',
+            color: '#000',
+          },
+        },
       },
     },
   },
