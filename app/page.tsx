@@ -6,6 +6,11 @@ import { Button } from '@mui/material';
 import Image from 'next/image';
 import Link from 'next/link';
 
+import diagram from '../public/images/open-audio-stack-diagram.svg';
+import external from '../public/icons/external.svg';
+import owlplug from '../public/images/owlplug-logo.svg';
+import studiorack from '../public/images/studiorack-logo.svg';
+
 export default function Home() {
   const pathname = usePathname();
 
@@ -28,13 +33,13 @@ export default function Home() {
               variant="outlined"
               href="https://open-audio-stack.github.io/open-audio-stack-registry/"
               target="_blank"
-              endIcon={<Image src="/icons/external.svg" alt="" width={12} height={12} />}
+              endIcon={<Image src={external} alt="" width={12} height={12} />}
             >
               View the registry
             </Button>
           </div>
           <div className={`${styles.card} ${styles.cardDiagram}`}>
-            <img src="/images/open-audio-stack-diagram.svg" alt="Open Audio Stack diagram" className={styles.image} />
+            <Image src={diagram} alt="Open Audio Stack diagram" className={styles.image} />
             <div className={`${styles.caption} ${styles.captionRegistry}`}>
               <h3>Registry</h3>
               <p>Database of package metadata and files with an API for read access.</p>
@@ -42,7 +47,7 @@ export default function Home() {
                 variant="contained"
                 href="https://github.com/open-audio-stack/open-audio-stack-registry/blob/main/specification.md"
                 target="_blank"
-                endIcon={<Image src="/icons/external.svg" alt="" width={12} height={12} />}
+                endIcon={<Image src={external} alt="" width={12} height={12} />}
               >
                 View docs
               </Button>
@@ -54,7 +59,7 @@ export default function Home() {
                 variant="contained"
                 href="https://github.com/open-audio-stack/open-audio-stack-core/blob/main/specification.md"
                 target="_blank"
-                endIcon={<Image src="/icons/external.svg" alt="" width={12} height={12} />}
+                endIcon={<Image src={external} alt="" width={12} height={12} />}
               >
                 View docs
               </Button>
@@ -66,10 +71,10 @@ export default function Home() {
             <p>INTEGRATED WITH</p>
             <div className={styles.logos}>
               <Link href="https://studiorack.github.io/studiorack-site/" target="_blank">
-                <Image src="/images/studiorack-logo.svg" alt="StudioRack logo" width={155} height={19} />
+                <Image src={studiorack} alt="StudioRack logo" width={155} height={19} />
               </Link>
               <Link href="https://owlplug.com" target="_blank">
-                <Image src="/images/owlplug-logo.svg" alt="OwlPlug logo" width={99} height={27} />
+                <Image src={owlplug} alt="OwlPlug logo" width={99} height={27} />
               </Link>
             </div>
           </div>

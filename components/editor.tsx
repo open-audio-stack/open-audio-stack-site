@@ -7,6 +7,8 @@ import { Button } from '@mui/material';
 import styles from '../styles/components/editor.module.css';
 import Image from 'next/image';
 
+import external from '../public/icons/external.svg';
+
 type EditorProps = {
   form: PackageVersion;
   pkgType: RegistryType;
@@ -113,7 +115,7 @@ const Editor = ({ form, pkgType, setForm, version }: EditorProps) => {
           variant="contained"
           color="inherit"
           onClick={() => handleSubmitViaGitHub(pkgType, form, version)}
-          endIcon={<Image src="/icons/external.svg" alt="" width={12} height={12} />}
+          endIcon={<Image src={external} alt="" width={12} height={12} />}
         >
           Submit via GitHub
         </Button>
