@@ -5,6 +5,7 @@ import { packageJsToYaml, packageYamlToJs, PackageVersion, RegistryType } from '
 import { Dispatch, SetStateAction, useEffect, useState, useRef } from 'react';
 import { Button } from '@mui/material';
 import styles from '../styles/components/editor.module.css';
+import Image from 'next/image';
 
 type EditorProps = {
   form: PackageVersion;
@@ -108,7 +109,12 @@ const Editor = ({ form, pkgType, setForm, version }: EditorProps) => {
         <Button variant="outlined" onClick={() => handleDownload(form)}>
           Download
         </Button>
-        <Button variant="contained" color="inherit" onClick={() => handleSubmitViaGitHub(pkgType, form, version)}>
+        <Button
+          variant="contained"
+          color="inherit"
+          onClick={() => handleSubmitViaGitHub(pkgType, form, version)}
+          endIcon={<Image src="/icons/external.svg" alt="" width={12} height={12} />}
+        >
           Submit via GitHub
         </Button>
       </div>

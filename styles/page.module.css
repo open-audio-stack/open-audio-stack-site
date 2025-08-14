@@ -10,6 +10,40 @@
   padding: 2rem;
 }
 
+.cardDiagram {
+  position: relative;
+}
+
+.cardDiagram h3 {
+  font-size: 1.25rem;
+  margin-bottom: 0.25rem;
+}
+
+.cardDiagram p {
+  font-size: 1rem;
+  line-height: 1.25em;
+  margin-bottom: 0.25rem;
+}
+
+.cardDiagram .caption {
+  position: absolute;
+  left: 30rem;
+  width: 12rem;
+}
+
+.cardDiagram .captionRegistry {
+  top: 10rem;
+}
+
+.cardDiagram .captionManager {
+  top: 24rem;
+}
+
+.card h1 {
+  font-size: 2rem;
+  line-height: 1.25em;
+}
+
 .card h4 {
   margin-bottom: 0.5rem;
 }
@@ -33,6 +67,37 @@
   margin-bottom: 1rem;
 }
 
+.button {
+  margin-right: 1rem !important;
+}
+
+.buttonOutlined img {
+  filter: invert(1);
+}
+
+.footer {
+  background-color: #f8f8f8;
+  display: flex;
+  justify-content: center;
+}
+
+.footerInner {
+  padding: 2rem 4rem;
+  width: 80%;
+}
+
+.footer p {
+  font-size: 0.75rem;
+  font-weight: 500;
+  margin-bottom: 0.2rem;
+}
+
+.footer .logos {
+  align-items: center;
+  display: flex;
+  gap: 1rem;
+}
+
 @media (min-width: 64rem) {
   .mainColumns {
     display: flex;
@@ -42,5 +107,23 @@
   .card {
     padding-top: 7rem;
     width: 33.33%;
+  }
+
+  .mainHome {
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 117px);
+  }
+
+  .mainHome .card {
+    width: 40%;
+  }
+
+  .mainHome .captionRegistry {
+    top: 15rem;
+  }
+
+  .mainHome .captionManager {
+    top: 29rem;
   }
 }
