@@ -25,7 +25,7 @@ export default function Home() {
               Built on principles from modern software package managers, our specification simplifies the management and
               distribution of audio plugins, presets, and projects.
             </p>
-            <Button className={styles.button} variant="contained" href="/plugin">
+            <Button className={styles.button} variant="contained" component={Link} href="/plugin">
               Add a package
             </Button>
             <Button
