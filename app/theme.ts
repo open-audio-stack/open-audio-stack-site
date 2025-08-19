@@ -1,7 +1,17 @@
 'use client';
 import { createTheme } from '@mui/material/styles';
 
-const theme = createTheme({
+// Shared between themes, if more themes are added this will be useful
+const sharedStyles = {
+  borderRadius: 10,
+};
+
+const sharedFilledInputStyles = {
+  borderRadius: sharedStyles.borderRadius,
+  backgroundColor: 'inherit',
+};
+
+export const lightTheme = createTheme({
   cssVariables: true,
   components: {
     MuiAutocomplete: {
@@ -14,7 +24,7 @@ const theme = createTheme({
     MuiFilledInput: {
       styleOverrides: {
         root: {
-          borderRadius: 10,
+          ...sharedStyles,
           backgroundColor: '#FAFAFA',
           boxShadow: 'none',
           borderBottom: 'none',
@@ -28,34 +38,25 @@ const theme = createTheme({
             backgroundColor: '#FAFAFA',
           },
         },
-        input: {
-          borderRadius: 10,
-          backgroundColor: 'inherit',
-        },
+        input: sharedFilledInputStyles,
       },
     },
     MuiOutlinedInput: {
       styleOverrides: {
         root: {
-          borderRadius: 10,
+          ...sharedStyles,
           backgroundColor: '#FAFAFA',
         },
-        input: {
-          borderRadius: 10,
-          backgroundColor: 'inherit',
-        },
+        input: sharedFilledInputStyles,
       },
     },
     MuiInputBase: {
       styleOverrides: {
         root: {
-          borderRadius: 10,
+          ...sharedStyles,
           backgroundColor: '#FAFAFA',
         },
-        input: {
-          borderRadius: 10,
-          backgroundColor: 'inherit',
-        },
+        input: sharedFilledInputStyles,
       },
     },
     MuiInputLabel: {
@@ -70,15 +71,15 @@ const theme = createTheme({
     MuiSelect: {
       styleOverrides: {
         select: {
-          borderRadius: 10,
+          ...sharedStyles,
           backgroundColor: '#FAFAFA',
         },
         outlined: {
-          borderRadius: 10,
+          ...sharedStyles,
           backgroundColor: '#FAFAFA',
         },
         filled: {
-          borderRadius: 10,
+          ...sharedStyles,
           backgroundColor: '#FAFAFA',
         },
         root: {
@@ -117,7 +118,7 @@ const theme = createTheme({
     MuiButton: {
       styleOverrides: {
         root: {
-          borderRadius: 10,
+          ...sharedStyles,
           textTransform: 'none',
         },
         contained: {
@@ -140,8 +141,172 @@ const theme = createTheme({
     },
   },
   typography: {
-    fontFamily: 'var(--font-geist-sans)',
+    fontFamily: 'var(--font-geist-sans), sans-serif',
+  },
+  palette: {
+    mode: 'light',
+    background: {
+      default: '#fafafa',
+      paper: '#fff',
+    },
+    text: {
+      primary: '#000',
+      secondary: '#222',
+    },
   },
 });
 
-export default theme;
+export const darkTheme = createTheme({
+  cssVariables: true,
+  components: {
+    MuiAutocomplete: {
+      styleOverrides: {
+        tag: {
+          marginTop: '7px',
+        },
+      },
+    },
+    MuiFilledInput: {
+      styleOverrides: {
+        root: {
+          ...sharedStyles,
+          backgroundColor: '#333',
+          boxShadow: 'none',
+          borderBottom: 'none',
+          '&:before, &:after': {
+            borderBottom: 'none !important',
+          },
+          '&:hover': {
+            backgroundColor: '#444',
+          },
+          '&.Mui-focused': {
+            backgroundColor: '#333',
+          },
+        },
+        input: {
+          ...sharedFilledInputStyles,
+          color: '#fff',
+        },
+      },
+    },
+    MuiOutlinedInput: {
+      styleOverrides: {
+        root: {
+          ...sharedStyles,
+          backgroundColor: '#333',
+        },
+        input: {
+          ...sharedFilledInputStyles,
+          color: '#fff',
+        },
+      },
+    },
+    MuiInputBase: {
+      styleOverrides: {
+        root: {
+          ...sharedStyles,
+          backgroundColor: '#333',
+        },
+        input: {
+          ...sharedFilledInputStyles,
+          color: '#fff',
+        },
+      },
+    },
+    MuiInputLabel: {
+      styleOverrides: {
+        root: {
+          color: '#fff',
+        },
+      },
+    },
+    MuiSelect: {
+      styleOverrides: {
+        select: {
+          ...sharedStyles,
+          backgroundColor: '#333',
+          color: '#fff',
+        },
+        outlined: {
+          ...sharedStyles,
+          backgroundColor: '#333',
+          color: '#fff',
+        },
+        filled: {
+          ...sharedStyles,
+          backgroundColor: '#333',
+          color: '#fff',
+        },
+        root: {
+          '&.select-dark': {
+            backgroundColor: '#000',
+            color: '#fff',
+            '.MuiSelect-select': {
+              backgroundColor: '#000',
+              color: '#fff',
+            },
+            '& .MuiInputLabel-root': {
+              color: '#fff',
+            },
+            '& .MuiSelect-icon': {
+              color: '#fff',
+            },
+          },
+        },
+      },
+    },
+    MuiChip: {
+      styleOverrides: {
+        root: {
+          backgroundColor: '#fff',
+          color: '#000',
+          '& .MuiChip-icon, & .MuiChip-deleteIcon, & svg': {
+            color: '#000',
+            fill: '#000',
+          },
+        },
+        label: {
+          color: '#000',
+        },
+      },
+    },
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          ...sharedStyles,
+          textTransform: 'none',
+        },
+        contained: {
+          backgroundColor: '#fff',
+          color: '#000',
+          '&:hover': {
+            backgroundColor: '#eee',
+            color: '#000',
+          },
+        },
+        outlined: {
+          borderColor: '#fff',
+          color: '#fff',
+          '&:hover': {
+            backgroundColor: '#333',
+            color: '#fff',
+          },
+        },
+      },
+    },
+  },
+  typography: {
+    fontFamily: 'var(--font-geist-sans), sans-serif',
+  },
+  palette: {
+    mode: 'dark',
+    background: {
+      default: '#181818',
+      paper: '#232323',
+    },
+    text: {
+      primary: '#fff',
+      secondary: '#eee',
+    },
+  },
+});
