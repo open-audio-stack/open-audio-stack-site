@@ -20,8 +20,6 @@ import Details from '../../components/details';
 import Files from '../../components/files';
 import Editor from '../../components/editor';
 import MultiSelect from '../../components/multiselect';
-import { TextField } from '@mui/material';
-import { GuideType, withTooltip } from '@/components/tooltip';
 
 const ROOT_URL = `https://open-audio-stack.github.io/open-audio-stack-registry`;
 const PKG_FORMATS = projectFormats;
@@ -55,7 +53,6 @@ function getBlankProjectVersion(): PackageVersion {
     changes: '',
     files: [getBlankFile()],
     plugins: {},
-    open: '',
   };
 }
 
@@ -100,15 +97,6 @@ export default function Home() {
               blankLabel="Select a template"
             />
             <Details form={form} pkgTypes={PKG_TYPES} setForm={setForm} version={version} setVersion={setVersion} />
-            <div className={styles.additionalField}>
-              <TextField
-                label={withTooltip(GuideType.Details, 'Project filename to open', 'open')}
-                variant="filled"
-                fullWidth
-                value={(form as ProjectInterface).open ?? ''}
-                onChange={e => setForm(f => ({ ...f, open: e.target.value }))}
-              />
-            </div>
             <div className={styles.additionalField}>
               <MultiSelect
                 value={(form as ProjectInterface).plugins || {}}

@@ -279,6 +279,15 @@ const Files = ({ form, pkgFormats, setForm }: FilesProps) => {
           </div>
           <div className={styles.formGroup}>
             <TextField
+              label={withTooltip(GuideType.Details, 'File to open', 'open')}
+              variant="filled"
+              fullWidth
+              value={file.open ?? ''}
+              onChange={e => handleFileChange(index, 'open', e.target.value)}
+            />
+          </div>
+          <div className={styles.formGroup}>
+            <TextField
               label={withTooltip(GuideType.Files, 'File size', 'size')}
               variant="filled"
               value={file.size ?? ''}
