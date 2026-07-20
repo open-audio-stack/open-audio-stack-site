@@ -1,8 +1,15 @@
 import AceEditor from 'react-ace';
 import 'ace-builds/src-noconflict/mode-yaml';
 import 'ace-builds/src-noconflict/theme-tomorrow_night_bright';
-import { packageJsToYaml, packageYamlToJs, PackageVersion, RegistryType } from '@open-audio-stack/core';
-import { Dispatch, SetStateAction, useEffect, useState, useRef } from 'react';
+import {
+  packageErrors,
+  packageJsToYaml,
+  packageRecommendations,
+  packageYamlToJs,
+  PackageVersion,
+  RegistryType,
+} from '@open-audio-stack/core';
+import { Dispatch, SetStateAction, useEffect, useMemo, useState, useRef } from 'react';
 import { Button } from '@mui/material';
 import styles from '../styles/components/editor.module.css';
 import Image from 'next/image';
@@ -70,6 +77,22 @@ const Editor = ({ form, pkgType, setForm, version }: EditorProps) => {
   const [yamlValue, setYamlValue] = useState(packageJsToYaml(form));
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
 
+  // Validation errors block submission-worthiness (missing/invalid required fields).
+  // Recommendations are non-blocking suggestions (e.g. missing arm64 support).
+  const errors = useMemo(() => packageErrors(form), [form]);
+  const recs = useMemo(() => packageRecommendations(form), [form]);
+
+  // Only surface errors/recommendations once the user has actually changed a value,
+  // rather than immediately flooding a freshly loaded (or blank) form with warnings.
+  // Loading a different template/version resets the baseline to compare against.
+  const baselineRef = useRef<string>(JSON.stringify(form));
+  const prevVersionRef = useRef(version);
+  if (prevVersionRef.current !== version) {
+    prevVersionRef.current = version;
+    baselineRef.current = JSON.stringify(form);
+  }
+  const touched = JSON.stringify(form) !== baselineRef.current;
+
   useEffect(() => {
     setYamlValue(packageJsToYaml(form));
   }, [form]);
@@ -104,6 +127,30 @@ const Editor = ({ form, pkgType, setForm, version }: EditorProps) => {
         }}
       />
       {yamlError && <div className={styles.error}>YAML Error: {yamlError}</div>}
+      {touched && errors.length > 0 && (
+        <div className={styles.errors}>
+          <strong>{errors.length === 1 ? 'Error' : `${errors.length} errors`}</strong>
+          <ul>
+            {errors.map((error, index) => (
+              <li key={index}>
+                {error.path.join('.') || 'package'}: {error.message}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+      {touched && recs.length > 0 && (
+        <div className={styles.recommendations}>
+          <strong>{recs.length === 1 ? 'Recommendation' : `${recs.length} recommendations`}</strong>
+          <ul>
+            {recs.map((rec, index) => (
+              <li key={index}>
+                {rec.field}: {rec.rec}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
       <div className={styles.buttons}>
         <Button variant="outlined" onClick={() => handleCopy(form)}>
           Copy
