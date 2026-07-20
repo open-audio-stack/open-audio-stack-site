@@ -27,6 +27,17 @@
 
 Website for Open Audio Stack with tools to create Plugin, Preset and Project packages.
 
+## Who is this for
+
+This website is built for **audio software developers** who want to register their software with Open Audio Stack. It provides a guided GUI for authoring package metadata — filling out fields, generating yaml, and submitting it to the registry via GitHub — so developers don't have to hand-write the format from scratch.
+
+It is part of a wider effort to make audio software distribution an **open, interoperable standard**: developers register their plugins, presets, projects and apps once, and any compatible tool can discover and install them. The ultimate beneficiaries are audio software developers' own customers — **musicians and music producers** — who get a more consistent experience installing audio software.
+
+- **Primary audience:** audio software developers authoring and submitting packages.
+- **Secondary audience:** musicians and music producers who install and use those packages.
+
+For the wider project context and strategy, see [Open Audio Stack](https://github.com/open-audio-stack).
+
 ## Developer information
 
 Open Audio Stack Registry was built using:
